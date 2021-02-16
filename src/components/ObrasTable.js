@@ -1,5 +1,16 @@
 import React from "react";
 
+// Query para obtener los datos de este componente
+// const query = query {
+//   obras {
+//     nombre
+//   	cliente
+//     ubicacion
+//     inicio
+//     fin
+//   }
+// }
+
 const data = {
   obras: [
     {
