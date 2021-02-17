@@ -1,206 +1,19 @@
 import React from "react";
+import { gql, useQuery } from "@apollo/client";
 
-// Query para obtener los datos de este componente
-// const query = query {
-//   peopleWithObra : people (where: {obra_null: false}) {
-//     id
-//     nombre
-//     apellido
-//   }
-//   allPeople: people {
-//     id
-//     nombre
-//     obra {
-//          id
-//      }
-//   }
-// }
-
-const data = {
-  peopleWithObra: [
-    {
-      id: "1",
-      nombre: "pintor1",
-      apellido: "pintor1",
-      cargo: "pintura",
-      obra: {
-        nombre: "Planta Rosario",
-      },
-    },
-    {
-      id: "5",
-      nombre: "soldador1",
-      apellido: "soldador1",
-      cargo: "soldador",
-      obra: {
-        nombre: "Planta Rosario",
-      },
-    },
-    {
-      id: "8",
-      nombre: "calidad1",
-      apellido: "calidad1",
-      cargo: "calidad",
-      obra: {
-        nombre: "Planta Rosario",
-      },
-    },
-    {
-      id: "10",
-      nombre: "seghigiene1",
-      apellido: "seghigiene1",
-      cargo: "shyma",
-      obra: {
-        nombre: "Planta Rosario",
-      },
-    },
-    {
-      id: "13",
-      nombre: "jefeobraB",
-      apellido: "jefeobraB",
-      cargo: "jefe_obra",
-      obra: {
-        nombre: "Planta Rosario",
-      },
-    },
-    {
-      id: "14",
-      nombre: "ayudanteA",
-      apellido: "ayudanteA",
-      cargo: "ayudante",
-      obra: {
-        nombre: "Planta Rosario",
-      },
-    },
-    {
-      id: "17",
-      nombre: "transportista1",
-      apellido: "transportista1",
-      cargo: "transportista",
-      obra: {
-        nombre: "Planta Rosario",
-      },
-    },
-  ],
-  allPeople: [
-    {
-      id: "1",
-      nombre: "pintor1",
-      apellido: "pintor1",
-      obra: {
-        id: "1",
-      },
-    },
-    {
-      id: "2",
-      nombre: "pintor2",
-      apellido: "pintor2",
-      obra: null,
-    },
-    {
-      id: "3",
-      nombre: "pintor3",
-      apellido: "pintor3",
-      obra: null,
-    },
-    {
-      id: "4",
-      nombre: "pintor4",
-      apellido: "pintor4",
-      obra: null,
-    },
-    {
-      id: "5",
-      nombre: "soldador1",
-      apellido: "soldador1",
-      obra: {
-        id: "1",
-      },
-    },
-    {
-      id: "6",
-      nombre: "soldador2",
-      apellido: "soldador2",
-      obra: null,
-    },
-    {
-      id: "7",
-      nombre: "soldador3",
-      apellido: "soldador3",
-      obra: null,
-    },
-    {
-      id: "8",
-      nombre: "calidad1",
-      apellido: "calidad1",
-      obra: {
-        id: "1",
-      },
-    },
-    {
-      id: "9",
-      nombre: "calidad2",
-      apellido: "calidad2",
-      obra: null,
-    },
-    {
-      id: "10",
-      nombre: "seghigiene1",
-      apellido: "seghigiene1",
-      obra: {
-        id: "1",
-      },
-    },
-    {
-      id: "11",
-      nombre: "seghigiene2",
-      apellido: "seghigiene2",
-      obra: null,
-    },
-    {
-      id: "12",
-      nombre: "jefeobraA",
-      apellido: "jefeobraA",
-      obra: null,
-    },
-    {
-      id: "13",
-      nombre: "jefeobraB",
-      apellido: "jefeobraB",
-      obra: {
-        id: "1",
-      },
-    },
-    {
-      id: "14",
-      nombre: "ayudanteA",
-      apellido: "ayudanteA",
-      obra: {
-        id: "1",
-      },
-    },
-    {
-      id: "15",
-      nombre: "ayudanteB",
-      apellido: "ayudanteB",
-      obra: null,
-    },
-    {
-      id: "16",
-      nombre: "ayudanteC",
-      apellido: "ayudanteC",
-      obra: null,
-    },
-    {
-      id: "17",
-      nombre: "transportista1",
-      apellido: "transportista1",
-      obra: {
-        id: "1",
-      },
-    },
-  ],
-};
+const GET_PERSONAL_DATA = gql`
+  query {
+    people {
+      id
+      nombre
+      apellido
+      cargo
+      obra {
+        nombre
+      }
+    }
+  }
+`;
 
 function TableRow({ nombre, apellido, cargo, obra }) {
   return (
@@ -252,6 +65,9 @@ function PeopleWithoutObra({ people }) {
           <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
             Apellido
           </th>
+          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+            Cargo
+          </th>
         </tr>
       </thead>
       <tbody className="text-gray-700">
@@ -264,8 +80,15 @@ function PeopleWithoutObra({ people }) {
 }
 
 export default function ObrasTable({ extData = null }) {
-  const { peopleWithObra, allPeople } = data;
-  const peopleWithoutObra = allPeople.filter((person) => !person.obra);
+  const { loading, error, data } = useQuery(GET_PERSONAL_DATA);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
+
+  console.log(loading, error, data)
+  const { people } = data;
+  const peopleWithoutObra = people.filter((person) => !person.obra);
+  const peopleWithObra = people.filter((person) => person.obra);
+
   return (
     <div className="w-full flex flex-col h-screen overflow-y-hidden">
       <div className="w-full overflow-x-hidden border-t flex flex-col">
