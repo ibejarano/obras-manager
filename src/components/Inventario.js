@@ -127,28 +127,40 @@ function Inventario({
   material_estructural,
 }) {
   return (
-    <div className="w-full mt-12">
+    <React.Fragment>
       <h1 className="text-xl pb-3 flex items-center">{obra.nombre}</h1>
-      <p className="text-xl pb-3 flex items-center">
-        <i className="fas fa-list mr-3"></i>Piping
-      </p>
-      <div className="bg-white overflow-auto">
-        <PipingTable materiales={material_piping} />
-      </div>
-      <p className="text-xl pb-3 flex items-center">
-        <i className="fas fa-list mr-3"></i>Welding
-      </p>
-      <div className="bg-white overflow-auto">
-        <WeldingTable materiales={material_welding} />
-      </div>
+      {material_piping.length > 0 && (
+        <div className="w-full mt-12">
+          <p className="text-l pb-3 flex items-center">
+            <i className="fas fa-list mr-3"></i>Piping
+          </p>
+          <div className="bg-white overflow-auto">
+            <PipingTable materiales={material_piping} />
+          </div>
+        </div>
+      )}
 
-      <p className="text-xl pb-3 flex items-center">
-        <i className="fas fa-list mr-3"></i>Perfiles Estructurales
-      </p>
-      <div className="bg-white overflow-auto">
-        <EstructTable materiales={material_estructural} />
-      </div>
-    </div>
+      {material_welding.length > 0 && (
+        <div className="w-full mt-12">
+          <p className="text-l pb-3 flex items-center">
+            <i className="fas fa-list mr-3"></i>Welding
+          </p>
+          <div className="bg-white overflow-auto">
+            <WeldingTable materiales={material_welding} />
+          </div>
+        </div>
+      )}
+      {material_estructural.length > 0 && (
+        <div className="w-full mt-12">
+          <p className="text-l pb-3 flex items-center">
+            <i className="fas fa-list mr-3"></i>Perfiles Estructurales
+          </p>
+          <div className="bg-white overflow-auto">
+            <EstructTable materiales={material_estructural} />
+          </div>
+        </div>
+      )}
+    </React.Fragment>
   );
 }
 
