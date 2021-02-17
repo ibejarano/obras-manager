@@ -1,16 +1,21 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const sections = ["Dashboard", "Personal Obra", "Inventario", "Mensajes"];
+const sections = [
+  { name: "Dashboard", slug: "/" },
+  { name: "Personal Obra", slug: "/personal" },
+  { name: "Inventario", slug: "/inventarios" },
+  { name: "Mensajes", slug: "/mensajes" },
+];
 
-function SectionLink({ name, url }) {
+function SectionLink({ name, slug }) {
   return (
-    <a
-      href={url}
+    <Link
       className="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item"
+      to={slug}
     >
-      <i className="fas fa-sticky-note mr-3"></i>
       {name}
-    </a>
+    </Link>
   );
 }
 
@@ -26,8 +31,8 @@ export default function SideBar() {
         </a>
       </div>
       <nav className="text-white text-base font-semibold pt-3">
-        {sections.map((name) => (
-          <SectionLink key={name} name={name} url="/" />
+        {sections.map((section) => (
+          <SectionLink key={section.name} {...section} />
         ))}
       </nav>
     </aside>
