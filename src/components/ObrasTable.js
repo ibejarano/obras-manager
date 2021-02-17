@@ -1,34 +1,18 @@
 import React from "react";
+import { gql, useQuery } from "@apollo/client";
 
 // Query para obtener los datos de este componente
-// const query = query {
-//   obras {
-//     nombre
-//   	cliente
-//     ubicacion
-//     inicio
-//     fin
-//   }
-// }
-
-const data = {
-  obras: [
-    {
-      nombre: "Planta Rosario",
-      cliente: "TGS",
-      ubicacion: "Rosario",
-      inicio: "2021-01-30",
-      fin: null,
-    },
-    {
-      nombre: "Reparacion Cordoba #223",
-      cliente: "YPF",
-      ubicacion: "Villa Maria",
-      inicio: "2021-01-20",
-      fin: null,
-    },
-  ],
-};
+const GET_OBRAS_DATA = gql`
+  query {
+    obras {
+      nombre
+      cliente
+      ubicacion
+      inicio
+      fin
+    }
+  }
+`;
 
 function TableRow({ nombre, ubicacion, cliente, inicio, fin }) {
   return (
@@ -74,6 +58,10 @@ function Table({ obras }) {
 }
 
 export default function ObrasTable({ extData = null }) {
+  const { loading, error, data } = useQuery(GET_OBRAS_DATA);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
+
   const { obras } = data;
   return (
     <div className="w-full flex flex-col h-screen overflow-y-hidden">

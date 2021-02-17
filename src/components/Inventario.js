@@ -1,71 +1,46 @@
 import React from "react";
+import { gql, useQuery } from "@apollo/client";
 
-const data = {
-  inventarios: [
-    {
-      obra: {
-        nombre: "Planta Rosario",
-      },
-      material_piping: [
-        {
-          diametro_pulg: 24,
-          cantidad_mts: 685.52,
-          num_serie: "awl3198b",
-        },
-        {
-          diametro_pulg: 16,
-          cantidad_mts: 89.3,
-          num_serie: "as01923a",
-        },
-      ],
-      material_welding: [
-        {
-          diametro_pulg: 24,
-          unidades: 2,
-          num_serie: "oia12",
-        },
-        {
-          diametro_pulg: 16,
-          unidades: 76,
-          num_serie: "991apw",
-        },
-      ],
-      material_estructural: [
-        {
-          cantidad_mts: 126.12,
-          material: "F54",
-          tipo_perfil: "L",
-        },
-        {
-          cantidad_mts: 14.11,
-          material: "F12",
-          tipo_perfil: "U",
-        },
-      ],
-    },
-    {
-      obra: {
-        nombre: "Reparacion Cordoba #223",
-      },
-      material_piping: [],
-      material_welding: [],
-      material_estructural: [
-        {
-          cantidad_mts: 123.1,
-          material: "F23",
-          tipo_perfil: "dobleT",
-        },
-      ],
-    },
-  ],
-};
+const GET_INVENTARIOS_DATA = gql`
+  query {
+    inventarios {
+      obra {
+        nombre
+      }
+      material_piping {
+        diametro_pulg
+        cantidad_mts
+        num_serie
+      }
+      material_welding {
+        diametro_pulg
+        unidades
+        num_serie
+      }
+      material_estructural {
+        cantidad_mts
+        material
+        tipo_perfil
+      }
+    }
+  }
+`;
 
-function TableRow({ diametro_pulg, cantidad_mts, num_serie, unidades, material, tipo_perfil }) {
+function TableRow({
+  diametro_pulg,
+  cantidad_mts,
+  num_serie,
+  unidades,
+  material,
+  tipo_perfil,
+}) {
   return (
     <tr className="bg-gray-200">
-      <td className="w-1/3 text-left py-3 px-4">{diametro_pulg || tipo_perfil}</td>
+      <td className="w-1/3 text-left py-3 px-4">
+        {diametro_pulg || tipo_perfil}
+      </td>
       <td className="w-1/3 text-left py-3 px-4">{cantidad_mts || unidades}</td>
-      <td className="text-left py-3 px-4">{num_serie || material }</td>
+      <td className="text-left py-3 px-4">{num_serie || material}</td>
     </tr>
   );
 }
@@ -87,8 +62,8 @@ function PipingTable({ materiales }) {
         </tr>
       </thead>
       <tbody className="text-gray-700">
-        {materiales.map((material) => (
-          <TableRow {...material} />
+        {materiales.map((material, idx) => (
+          <TableRow key={idx} {...material} />
         ))}
       </tbody>
     </table>
@@ -112,8 +87,8 @@ function WeldingTable({ materiales }) {
         </tr>
       </thead>
       <tbody className="text-gray-700">
-        {materiales.map((material) => (
-          <TableRow {...material} />
+        {materiales.map((material, idx) => (
+          <TableRow key={idx} {...material} />
         ))}
       </tbody>
     </table>
@@ -137,8 +112,8 @@ function EstructTable({ materiales }) {
         </tr>
       </thead>
       <tbody className="text-gray-700">
-        {materiales.map((material) => (
-          <TableRow {...material} />
+        {materiales.map((material, idx) => (
+          <TableRow key={idx} {...material} />
         ))}
       </tbody>
     </table>
@@ -178,6 +153,9 @@ function Inventario({
 }
 
 export default function Inventarios() {
+  const { loading, error, data } = useQuery(GET_INVENTARIOS_DATA);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
   const { inventarios } = data;
   return (
     <div className="w-full flex flex-col h-screen overflow-y-hidden">
@@ -185,7 +163,7 @@ export default function Inventarios() {
         <main className="w-full flex-grow p-6">
           <h1 className="text-3xl text-black pb-6">Inventario</h1>
           {inventarios.map((inventario) => (
-            <Inventario {...inventario} />
+            <Inventario key={inventario.obra.nombre} {...inventario} />
           ))}
         </main>
       </div>
