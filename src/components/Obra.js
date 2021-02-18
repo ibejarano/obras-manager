@@ -8,6 +8,11 @@ const GET_OBRAS_WITH_ID = gql`
     obra(id: $idObra) {
       nombre
       cliente
+      personas {
+        nombre
+        apellido
+        cargo
+      }
       plano {
         civiles {
           url
@@ -49,14 +54,50 @@ const GET_OBRAS_WITH_ID = gql`
   }
 `;
 
-function TableRow({ name, url }) {
+function TableRow({ name, url, tipo }) {
   return (
     <tr className="bg-gray-200">
       <td className="w-1/3 text-left py-3 px-4">{name}</td>
+      <td className="w-1/3 text-left py-3 px-4">{tipo}</td>
       <td className="w-1/3 text-left py-3 px-4">
-        <a target="_blank" href={"http://localhost:1337" + url}>GET</a>
+        <a target="_blank" href={"http://localhost:1337" + url}>
+          GET
+        </a>
       </td>
     </tr>
+  );
+}
+
+function PeopleObra({ people }) {
+  const RowPersona = ({ nombre, apellido, cargo }) => (
+    <tr className="bg-gray-200">
+      <td className="w-1/3 text-left py-3 px-4">{nombre}</td>
+      <td className="w-1/3 text-left py-3 px-4">{apellido}</td>
+      <td className="text-left py-3 px-4">{cargo}</td>
+    </tr>
+  );
+
+  return (
+    <table className="min-w-full bg-white">
+      <thead className="bg-gray-800 text-white">
+        <tr>
+          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+            Nombre
+          </th>
+          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+            Apellido
+          </th>
+          <th className="text-left py-3 px-4 uppercase font-semibold text-sm">
+            Cargo
+          </th>
+        </tr>
+      </thead>
+      <tbody className="text-gray-700">
+        {people.map((person) => (
+          <RowPersona {...person} key={person.id} />
+        ))}
+      </tbody>
+    </table>
   );
 }
 
@@ -70,19 +111,22 @@ function Planos({ plano }) {
             Nombre del plano
           </th>
           <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+            Tipo de plano
+          </th>
+          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
             Descargar
           </th>
         </tr>
       </thead>
       <tbody className="text-gray-700">
         {civiles.map((plano) => (
-          <TableRow {...plano} key={plano.name} />
+          <TableRow {...plano} key={plano.name} tipo="Estructural" />
         ))}
         {mecanicos.map((plano) => (
-          <TableRow {...plano} key={plano.name} />
+          <TableRow {...plano} key={plano.name} tipo="Mecanico" />
         ))}
         {piping.map((plano) => (
-          <TableRow {...plano} key={plano.name} />
+          <TableRow {...plano} key={plano.name} tipo="Piping" />
         ))}
       </tbody>
     </table>
@@ -109,6 +153,11 @@ export default function Obra() {
           <p className="text-xl pb-3 flex items-center">
             Cliente: {obra.cliente}
           </p>
+          <div className="w-full mt-12">
+            <div className="bg-white overflow-auto">
+              <PeopleObra people={obra.personas} />
+            </div>
+          </div>
           <div className="w-full mt-12">
             <div className="bg-white overflow-auto">
               <Planos plano={obra.plano} />
