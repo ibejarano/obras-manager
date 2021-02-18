@@ -14,12 +14,62 @@ function TableRow({
         {diametro_pulg || tipo_perfil}
       </td>
       <td className="w-1/3 text-left py-3 px-4">{cantidad_mts || unidades}</td>
-      <td className="text-left py-3 px-4">{num_serie || material}</td>
+      {material && <td className="text-left py-3 px-4">{material}</td>}
+      {num_serie && <td className="text-left py-3 px-4">{num_serie}</td>}
     </tr>
   );
 }
 
 function PipingTable({ materiales }) {
+  const [newItem, setNewItem] = React.useState({
+    diametro_pulg: 0,
+    cantidad_mts: 0,
+    material: "",
+    num_serie: "",
+  });
+
+  const handleChange = (e) => {
+    const attr = e.target.name;
+    setNewItem((prev) => ({ ...prev, [attr]: e.target.value }));
+  };
+
+  const NewItem = ({ diametro_pulg, cantidad_mts, material, num_serie }) => (
+    <tr className="bg-white-200">
+      <td className="w-1/3 text-left py-3 px-4">
+        <input
+          onChange={handleChange}
+          name="diametro_pulg"
+          type="number"
+          value={diametro_pulg}
+        />
+      </td>
+      <td className="w-1/3 text-left py-3 px-4">
+        <input
+          type="number"
+          onChange={handleChange}
+          name="cantidad_mts"
+          value={cantidad_mts}
+        />
+      </td>
+      <td className="text-left py-3 px-4">
+        <input
+          type="text"
+          onChange={handleChange}
+          name="material"
+          value={material}
+        />
+      </td>
+      <td className="text-left py-3 px-4">
+        <input
+          type="text"
+          onChange={handleChange}
+          name="num_serie"
+          value={num_serie}
+        />
+      </td>
+    </tr>
+  );
+
   return (
     <table className="min-w-full bg-white">
       <thead className="bg-gray-800 text-white">
@@ -31,6 +81,9 @@ function PipingTable({ materiales }) {
             Cantidad [metros]
           </th>
           <th className="text-left py-3 px-4 uppercase font-semibold text-sm">
+            Material
+          </th>
+          <th className="text-left py-3 px-4 uppercase font-semibold text-sm">
             Serie
           </th>
         </tr>
@@ -39,6 +92,7 @@ function PipingTable({ materiales }) {
         {materiales.map((material, idx) => (
           <TableRow key={idx} {...material} />
         ))}
+        <NewItem {...newItem} />
       </tbody>
     </table>
   );

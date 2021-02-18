@@ -1,6 +1,20 @@
 import React from "react";
+import { useQuery, gql } from "@apollo/client";
+import { useParams } from "react-router-dom";
 
-export default function PeopleObra({ people }) {
+const GET_PERSONAS_WITH_ID = gql`
+  query($idObra: ID!) {
+    obra(id: $idObra) {
+      personas {
+        nombre
+        apellido
+        cargo
+      }
+    }
+  }
+`;
+
+export default function PeopleObra() {
   const RowPersona = ({ nombre, apellido, cargo }) => (
     <tr className="bg-gray-200">
       <td className="w-1/3 text-left py-3 px-4">{nombre}</td>
@@ -8,6 +22,20 @@ export default function PeopleObra({ people }) {
       <td className="text-left py-3 px-4">{cargo}</td>
     </tr>
   );
+
+  const { id } = useParams();
+  const { loading, error, data } = useQuery(GET_PERSONAS_WITH_ID, {
+    variables: {
+      idObra: id,
+    },
+  });
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
+
+  const {
+    obra: { personas },
+  } = data;
 
   return (
     <table className="min-w-full bg-white">
@@ -25,7 +53,7 @@ export default function PeopleObra({ people }) {
         </tr>
       </thead>
       <tbody className="text-gray-700">
-        {people.map((person) => (
+        {personas.map((person) => (
           <RowPersona {...person} key={person.id} />
         ))}
       </tbody>

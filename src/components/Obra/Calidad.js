@@ -1,4 +1,19 @@
 import React from "react";
+import { useParams } from "react-router-dom";
+import { gql, useQuery } from "@apollo/client";
+
+const GET_CALIDAD_WITH_ID = gql`
+  query($idObra: ID!) {
+    obra(id: $idObra) {
+      calidad {
+        certificados {
+          url
+          name
+        }
+      }
+    }
+  }
+`;
 
 function TableRow({ name, url }) {
   return (
@@ -13,7 +28,23 @@ function TableRow({ name, url }) {
   );
 }
 
-export default function Calidad({ certificados }) {
+export default function Calidad() {
+  const { id } = useParams();
+  const { loading, error, data } = useQuery(GET_CALIDAD_WITH_ID, {
+    variables: {
+      idObra: id,
+    },
+  });
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
+
+  const {
+    obra: { calidad },
+  } = data;
+
+  const { certificados } = calidad;
+
   return (
     <table className="min-w-full bg-white">
       <thead className="bg-gray-800 text-white">
