@@ -7,7 +7,7 @@ import Layout from "./components/Layout";
 import ObrasTable from "./components/ObrasTable";
 import EventsTable from "./components/EventTable";
 import PeopleTable from "./components/PeopleTable";
-import Inventarios from "./components/Inventario";
+import Inventarios from "./components/Inventarios";
 import Obra from './components/Obra'
 
 function App() {
