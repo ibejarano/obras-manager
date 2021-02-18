@@ -102,7 +102,9 @@ export default function InventarioObra({
 }) {
   return (
     <React.Fragment>
-      <h1 className="text-xl pb-3 flex items-center">{obra.nombre}</h1>
+      {obra && (
+        <h1 className="text-xl pb-3 flex items-center">{obra.nombre}</h1>
+      )}
       {material_piping.length > 0 && (
         <div className="w-full mt-12">
           <p className="text-l pb-3 flex items-center">

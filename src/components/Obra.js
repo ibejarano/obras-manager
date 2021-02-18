@@ -3,6 +3,8 @@ import { gql, useQuery } from "@apollo/client";
 
 import { useParams } from "react-router-dom";
 
+import InventarioObra from "./Inventarios/InventarioObra";
+
 const GET_OBRAS_WITH_ID = gql`
   query($idObra: ID!) {
     obra(id: $idObra) {
@@ -161,6 +163,11 @@ export default function Obra() {
           <div className="w-full mt-12">
             <div className="bg-white overflow-auto">
               <Planos plano={obra.plano} />
+            </div>
+          </div>
+          <div className="w-full mt-12">
+            <div className="bg-white overflow-auto">
+              <InventarioObra {...obra.inventario} />
             </div>
           </div>
         </main>
