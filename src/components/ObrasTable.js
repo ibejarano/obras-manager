@@ -1,10 +1,12 @@
 import React from "react";
+import { Link, Route } from "react-router-dom";
 import { gql, useQuery } from "@apollo/client";
 
 // Query para obtener los datos de este componente
 const GET_OBRAS_DATA = gql`
   query {
     obras {
+      id
       nombre
       cliente
       ubicacion
@@ -14,10 +16,12 @@ const GET_OBRAS_DATA = gql`
   }
 `;
 
-function TableRow({ nombre, ubicacion, cliente, inicio, fin }) {
+function TableRow({ id, nombre, ubicacion, cliente, inicio, fin }) {
   return (
     <tr className="bg-gray-200">
-      <td className="w-1/3 text-left py-3 px-4">{nombre}</td>
+      <td className="w-1/3 text-left py-3 px-4">
+        <Link to={"/" + id}>{nombre}</Link>
+      </td>
       <td className="w-1/3 text-left py-3 px-4">{cliente}</td>
       <td className="text-left py-3 px-4">{ubicacion}</td>
       <td className="text-left py-3 px-4">{inicio}</td>
