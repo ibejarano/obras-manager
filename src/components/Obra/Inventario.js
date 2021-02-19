@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery, gql } from "@apollo/client";
 import { useParams } from "react-router-dom";
 
 import InventarioObra from "../Inventarios/InventarioObra";
+import UpdateInventario from "../Inventarios/UpdateInventario";
 
 const GET_INVENTARIO_WITH_ID = gql`
   query($idObra: ID!) {
@@ -36,14 +37,19 @@ export default function Inventario() {
       idObra: id,
     },
   });
+  const [openAddInv, setOpenAddInv] = useState(false);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
-
   const {
     obra: { inventario },
   } = data;
 
-  console.log(inventario);
-  return <InventarioObra {...inventario} />;
+  return (
+    <React.Fragment>
+      <InventarioObra {...inventario} />
+      <button onClick={() => setOpenAddInv(true)}>Agregar material</button>
+      {openAddInv && <UpdateInventario setOpen={setOpenAddInv} />}
+    </React.Fragment>
+  );
 }

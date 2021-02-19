@@ -32,6 +32,7 @@ export default function Inventarios() {
   const { loading, error, data } = useQuery(GET_INVENTARIOS_DATA);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
+
   const { inventarios } = data;
   return (
     <div className="w-full flex flex-col h-screen overflow-y-hidden">

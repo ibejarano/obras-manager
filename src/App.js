@@ -28,7 +28,9 @@ function App() {
           <Route path="/inventarios">
             <Inventarios />
           </Route>
-          <Route path="/:id" children={<Obra />} />
+          <Route path="/:id">
+            <Obra />
+          </Route>
           <Route path="/">
             <ObrasTable />
             <EventsTable />
