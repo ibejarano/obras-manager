@@ -81,6 +81,7 @@ export default function Obra() {
               <PageInfo
                 title="Galeria de fotos"
                 description="No implementado"
+                url="/"
               />
             </div>
           </Route>

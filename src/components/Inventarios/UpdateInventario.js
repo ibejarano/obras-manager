@@ -15,55 +15,46 @@ const AVAILABLE_DIAMETERS = [
   "30",
 ];
 
-// const UPDATE_INVENTORY_PIPING = gql`
-//   mutation(
-//     $diametro_pulg: Int!
-//     $material: String!
-//     $num_serie: String!
-//     $cantidad_mts: Float!
-//   ) {
-//     updateInventario(
-//       input: {
-//         where: { id: 5 }
-//         data: {
-//           material_piping: [
-//             {
-//               diametro_pulg: $diametro_pulg
-//               material: $material
-//               num_serie: $num_serie
-//               cantidad_mts: $cantidad_mts
-//             }
-//           ]
-//         }
-//       }
-//     )
-//   }
-// `;
-
 const UPDATE_INVENTORY_PIPING = gql`
-  mutation {
+  mutation(
+    $diametro_pulg: String!
+    $material: String!
+    $num_serie: String!
+    $cantidad_mts: Float!
+    $id: ID!
+  ) {
     updateInventario(
       input: {
-        where: { id: 5 }
+        where: { id: $id }
         data: {
           material_piping: [
             {
-              diametro_pulg: 24
-              material: "apiss"
-              num_serie: "asdoowp["
-              cantidad_mts: 22.34
+              diametro_pulg: $diametro_pulg
+              material: $material
+              num_serie: $num_serie
+              cantidad_mts: $cantidad_mts
             }
           ]
         }
       }
-    )
+    ) {
+      inventario {
+        material_piping {
+          diametro_pulg
+          num_serie
+          cantidad_mts
+          material
+        }
+      }
+    }
   }
 `;
 
-export default function AddPipingMaterial({ setOpen }) {
+export default function AddPipingMaterial({ setOpen, idInventario }) {
+  let tmpValue;
   const [newItem, setNewItem] = React.useState({
-    diametro_pulg: 0,
-    cantidad_mts: 0,
+    diametro_pulg: "",
+    cantidad_mts: 0.0,
     material: "",
     num_serie: "",
   });
@@ -72,13 +63,20 @@ export default function AddPipingMaterial({ setOpen }) {
 
   const handleChange = (e) => {
     const attr = e.target.name;
-    setNewItem((prev) => ({ ...prev, [attr]: e.target.value }));
+    if (attr == "cantidad_mts") {
+      tmpValue = parseFloat(e.target.value);
+    } else {
+      tmpValue = e.target.value;
+    }
+
+    setNewItem((prev) => ({ ...prev, [attr]: tmpValue }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // updateInventory({ variables: { ...newItem } });
-    updateInventario({ variables: {} });
+    updateInventario({
+      variables: { ...newItem, id: idInventario },
+    }).then(({ data: { updateInventario } }) => console.log(updateInventario));
   };
 
   return (
@@ -86,11 +84,11 @@ export default function AddPipingMaterial({ setOpen }) {
       className="shadow overflow-hidden sm:rounded-md w-1/6 absolute top-12.5 right-3.5"
       onSubmit={handleSubmit}
     >
-      <div class="px-4 py-5 bg-white sm:p-6">
-        <div class="grid grid-cols-6 gap-6">
+      <div className="px-4 py-5 bg-white sm:p-6">
+        <div className="grid grid-cols-6 gap-6">
           <div className="col-span-6 sm:col-span-6 lg:col-span-6">
             <label
-              for="diametro_pulg"
+              htmlFor="diametro_pulg"
               className="block text-sm font-medium text-gray-700"
             >
               Diametro [pulg]
@@ -101,15 +99,18 @@ export default function AddPipingMaterial({ setOpen }) {
               onChange={handleChange}
               value={newItem.diametro_pulg}
             >
+              <option selected disabled value="">
+                -Seleccione uno-
+              </option>
               {AVAILABLE_DIAMETERS.map((d) => (
-                <option>{d}</option>
+                <option key={d}>{d}</option>
               ))}
             </select>
           </div>
           <div className="col-span-6 sm:col-span-3 lg:col-span-6">
             <label
-              for="cantidad_mts"
-              class="block text-sm font-medium text-gray-700"
+              htmlFor="cantidad_mts"
+              className="block text-sm font-medium text-gray-700"
             >
               Cantidad [metros]
             </label>
@@ -124,8 +125,8 @@ export default function AddPipingMaterial({ setOpen }) {
 
           <div className="col-span-6 sm:col-span-3 lg:col-span-6">
             <label
-              for="material"
-              class="block text-sm font-medium text-gray-700"
+              htmlFor="material"
+              className="block text-sm font-medium text-gray-700"
             >
               Material
             </label>
@@ -140,8 +141,8 @@ export default function AddPipingMaterial({ setOpen }) {
 
           <div className="col-span-6 sm:col-span-3 lg:col-span-6">
             <label
-              for="num_serie"
-              class="block text-sm font-medium text-gray-700"
+              htmlFor="num_serie"
+              className="block text-sm font-medium text-gray-700"
             >
               Numero de serie / Lote
             </label>

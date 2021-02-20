@@ -9,6 +9,7 @@ const GET_INVENTARIO_WITH_ID = gql`
   query($idObra: ID!) {
     obra(id: $idObra) {
       inventario {
+        id
         material_piping {
           diametro_pulg
           cantidad_mts
@@ -49,7 +50,12 @@ export default function Inventario() {
     <React.Fragment>
       <InventarioObra {...inventario} />
       <button onClick={() => setOpenAddInv(true)}>Agregar material</button>
-      {openAddInv && <UpdateInventario setOpen={setOpenAddInv} />}
+      {openAddInv && (
+        <UpdateInventario
+          setOpen={setOpenAddInv}
+          idInventario={inventario.id}
+        />
+      )}
     </React.Fragment>
   );
 }
