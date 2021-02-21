@@ -15,68 +15,55 @@ const AVAILABLE_DIAMETERS = [
   "30",
 ];
 
-const UPDATE_INVENTORY_PIPING = gql`
+const CREATE_MATERIAL_ENTRY = gql`
   mutation(
     $diametro_pulg: String!
     $material: String!
     $num_serie: String!
-    $cantidad_mts: Float!
+    $cantidad: String!
     $id: ID!
   ) {
-    updateInventario(
+    createMaterial(
       input: {
-        where: { id: $id }
         data: {
-          material_piping: [
-            {
-              diametro_pulg: $diametro_pulg
-              material: $material
-              num_serie: $num_serie
-              cantidad_mts: $cantidad_mts
-            }
-          ]
+          num_serie: $num_serie
+          diametro_pulg: $diametro_pulg
+          cantidad: $cantidad
+          material: $material
+          inventario: $id
+          tipo: piping
         }
       }
     ) {
-      inventario {
-        material_piping {
-          diametro_pulg
-          num_serie
-          cantidad_mts
-          material
-        }
+      material {
+        num_serie
       }
     }
   }
 `;
 
 export default function AddPipingMaterial({ setOpen, idInventario }) {
-  let tmpValue;
   const [newItem, setNewItem] = React.useState({
-    diametro_pulg: "",
-    cantidad_mts: 0.0,
-    material: "",
-    num_serie: "",
+    diametro_pulg: "8",
+    cantidad: "34.341",
+    material: "api60xl",
+    num_serie: "lls918",
   });
 
-  const [updateInventario] = useMutation(UPDATE_INVENTORY_PIPING);
+  const [createMaterial] = useMutation(CREATE_MATERIAL_ENTRY);
 
   const handleChange = (e) => {
     const attr = e.target.name;
-    if (attr == "cantidad_mts") {
-      tmpValue = parseFloat(e.target.value);
-    } else {
-      tmpValue = e.target.value;
-    }
-
-    setNewItem((prev) => ({ ...prev, [attr]: tmpValue }));
+    setNewItem((prev) => ({ ...prev, [attr]: e.target.value }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateInventario({
+    createMaterial({
       variables: { ...newItem, id: idInventario },
-    }).then(({ data: { updateInventario } }) => console.log(updateInventario));
+    })
+      .then(({ data: { updateInventario } }) => console.log(updateInventario))
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -109,7 +96,7 @@ export default function AddPipingMaterial({ setOpen, idInventario }) {
           </div>
           <div className="col-span-6 sm:col-span-3 lg:col-span-6">
             <label
-              htmlFor="cantidad_mts"
+              htmlFor="cantidad"
               className="block text-sm font-medium text-gray-700"
             >
               Cantidad [metros]
@@ -117,8 +104,8 @@ export default function AddPipingMaterial({ setOpen, idInventario }) {
             <input
               type="number"
               onChange={handleChange}
-              name="cantidad_mts"
-              value={newItem.cantidad_mts}
+              name="cantidad"
+              value={newItem.cantidad}
               className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
             />
           </div>

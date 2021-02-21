@@ -2,7 +2,7 @@ import React from "react";
 
 function TableRow({
   diametro_pulg,
-  cantidad_mts,
+  cantidad,
   num_serie,
   unidades,
   material,
@@ -13,9 +13,9 @@ function TableRow({
       <td className="w-1/3 text-left py-3 px-4">
         {diametro_pulg || tipo_perfil}
       </td>
-      <td className="w-1/3 text-left py-3 px-4">{cantidad_mts || unidades}</td>
-      {material && <td className="text-left py-3 px-4">{material}</td>}
-      {num_serie && <td className="text-left py-3 px-4">{num_serie}</td>}
+      <td className="w-1/3 text-left py-3 px-4">{cantidad || unidades}</td>
+      <td className="text-left py-3 px-4">{material || "-"}</td>
+      <td className="text-left py-3 px-4">{num_serie || "-"}</td>
     </tr>
   );
 }
@@ -98,28 +98,23 @@ function EstructTable({ materiales }) {
   );
 }
 
-export default function InventarioObra({
-  obra,
-  material_piping,
-  material_welding,
-  material_estructural,
-}) {
+export default function InventarioObra({ obra, materials }) {
   return (
     <React.Fragment>
       {obra && (
         <h1 className="text-xl pb-3 flex items-center">{obra.nombre}</h1>
       )}
-      {material_piping.length > 0 && (
+      {materials.length > 0 && (
         <div className="w-full mt-12">
           <p className="text-l pb-3 flex items-center">
             <i className="fas fa-list mr-3"></i>Piping
           </p>
           <div className="bg-white overflow-auto">
-            <PipingTable materiales={material_piping} />
+            <PipingTable materiales={materials} />
           </div>
         </div>
       )}
-
+      {/* 
       {material_welding.length > 0 && (
         <div className="w-full mt-12">
           <p className="text-l pb-3 flex items-center">
@@ -139,7 +134,7 @@ export default function InventarioObra({
             <EstructTable materiales={material_estructural} />
           </div>
         </div>
-      )}
+      )} */}
     </React.Fragment>
   );
 }
