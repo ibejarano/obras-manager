@@ -24,7 +24,7 @@ const GET_INVENTARIO_WITH_ID = gql`
 
 export default function Inventario() {
   const { id } = useParams();
-  const { loading, error, data } = useQuery(GET_INVENTARIO_WITH_ID, {
+  const { loading, error, data, refetch } = useQuery(GET_INVENTARIO_WITH_ID, {
     variables: {
       idObra: id,
     },
@@ -45,7 +45,7 @@ export default function Inventario() {
         <UpdateInventario
           setOpen={setOpenAddInv}
           idInventario={inventario.id}
-          material_piping={inventario.materials}
+          refetch={refetch}
         />
       )}
     </React.Fragment>

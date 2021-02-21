@@ -42,7 +42,7 @@ const CREATE_MATERIAL_ENTRY = gql`
   }
 `;
 
-export default function AddPipingMaterial({ setOpen, idInventario }) {
+export default function AddPipingMaterial({ setOpen, idInventario, refetch }) {
   const [newItem, setNewItem] = React.useState({
     diametro_pulg: "8",
     cantidad: "34.341",
@@ -62,7 +62,7 @@ export default function AddPipingMaterial({ setOpen, idInventario }) {
     createMaterial({
       variables: { ...newItem, id: idInventario },
     })
-      .then(({ data: { updateInventario } }) => console.log(updateInventario))
+      .then(({ data: { updateInventario } }) => refetch())
       .catch((err) => console.log(err));
   };
 
