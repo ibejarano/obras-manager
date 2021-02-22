@@ -1,19 +1,7 @@
 import React from "react";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
-const GET_PERSONAL_DATA = gql`
-  query {
-    people {
-      id
-      nombre
-      apellido
-      cargo
-      obra {
-        nombre
-      }
-    }
-  }
-`;
+import { GET_PERSONAS } from "../adapters/queries";
 
 function TableRow({ nombre, apellido, cargo, obra }) {
   return (
@@ -80,11 +68,10 @@ function PeopleWithoutObra({ people }) {
 }
 
 export default function ObrasTable({ extData = null }) {
-  const { loading, error, data } = useQuery(GET_PERSONAL_DATA);
+  const { loading, error, data } = useQuery(GET_PERSONAS);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
-  console.log(loading, error, data)
   const { people } = data;
   const peopleWithoutObra = people.filter((person) => !person.obra);
   const peopleWithObra = people.filter((person) => person.obra);

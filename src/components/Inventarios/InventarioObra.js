@@ -4,7 +4,6 @@ function TableRow({
   diametro_pulg,
   cantidad,
   num_serie,
-  unidades,
   material,
   tipo_perfil,
   descripcion,

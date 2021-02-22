@@ -1,5 +1,5 @@
 import React from "react";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 import { useParams, Link, Route, Switch } from "react-router-dom";
 
@@ -8,14 +8,7 @@ import PeopleObra from "./People";
 import Planos from "./Planos";
 import Inventario from "./Inventario";
 
-const GET_OBRAS_WITH_ID = gql`
-  query($idObra: ID!) {
-    obra(id: $idObra) {
-      nombre
-      cliente
-    }
-  }
-`;
+import { GET_OBRAS_WITH_ID } from "../../adapters/queries";
 
 function PageInfo({ title, url, description }) {
   return (

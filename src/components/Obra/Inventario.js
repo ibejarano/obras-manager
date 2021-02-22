@@ -1,40 +1,10 @@
 import React, { useState } from "react";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 
 import InventarioObra from "../Inventarios/InventarioObra";
 import UpdateInventario from "../Inventarios/UpdateInventario";
-
-const GET_INVENTARIO_WITH_ID = gql`
-  query($idObra: ID!) {
-    obra(id: $idObra) {
-      inventario {
-        id
-        piping: materials(where: { tipo: "piping" }) {
-          diametro_pulg
-          cantidad
-          num_serie
-          tipo
-          material
-        }
-        welding: materials(where: { tipo: "welding" }) {
-          diametro_pulg
-          cantidad
-          num_serie
-          material
-          descripcion
-        }
-        estructural: materials(where: { tipo: "estructural" }) {
-          tipo_perfil
-          cantidad
-          num_serie
-          tipo
-          material
-        }
-      }
-    }
-  }
-`;
+import { GET_INVENTARIO_WITH_ID } from "../../adapters/queries";
 
 export default function Inventario() {
   const { id } = useParams();

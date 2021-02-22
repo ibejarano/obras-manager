@@ -2,38 +2,10 @@ import React from "react";
 import { gql, useQuery } from "@apollo/client";
 
 import InventarioObra from "./InventarioObra";
-
-const GET_INVENTARIOS_DATA = gql`
-  query {
-    inventarios {
-      obra {
-        nombre
-      }
-      piping: materials(where: { tipo: "piping" }) {
-        diametro_pulg
-        cantidad
-        num_serie
-        material
-      }
-      welding: materials(where: { tipo: "welding" }) {
-        diametro_pulg
-        cantidad
-        num_serie
-        material
-        descripcion
-      }
-      estructural: materials(where: { tipo: "estructural" }) {
-        tipo_perfil
-        cantidad
-        num_serie
-        material
-      }
-    }
-  }
-`;
+import { GET_INVENTARIOS } from "../../adapters/queries";
 
 export default function Inventarios() {
-  const { loading, error, data } = useQuery(GET_INVENTARIOS_DATA);
+  const { loading, error, data } = useQuery(GET_INVENTARIOS);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 

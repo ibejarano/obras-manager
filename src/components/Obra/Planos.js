@@ -1,27 +1,8 @@
 import React from "react";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 
-const GET_PLANOS_WITH_ID = gql`
-  query($idObra: ID!) {
-    obra(id: $idObra) {
-      plano {
-        civiles {
-          url
-          name
-        }
-        mecanicos {
-          url
-          name
-        }
-        piping {
-          url
-          name
-        }
-      }
-    }
-  }
-`;
+import { GET_PLANOS_WITH_ID } from "../../adapters/queries";
 
 function TableRow({ name, url, tipo }) {
   return (
@@ -53,7 +34,7 @@ export default function Planos() {
   } = data;
 
   const { civiles, mecanicos, piping } = plano;
-  
+
   return (
     <table className="min-w-full bg-white">
       <thead className="bg-gray-800 text-white">

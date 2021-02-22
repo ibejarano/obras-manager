@@ -1,18 +1,8 @@
 import React from "react";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 
-const GET_PERSONAS_WITH_ID = gql`
-  query($idObra: ID!) {
-    obra(id: $idObra) {
-      personas {
-        nombre
-        apellido
-        cargo
-      }
-    }
-  }
-`;
+import { GET_PERSONAS_WITH_ID } from "../../adapters/queries";
 
 export default function PeopleObra() {
   const RowPersona = ({ nombre, apellido, cargo }) => (

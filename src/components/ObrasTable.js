@@ -1,20 +1,8 @@
 import React from "react";
-import { Link, Route } from "react-router-dom";
-import { gql, useQuery } from "@apollo/client";
+import { Link } from "react-router-dom";
+import { useQuery } from "@apollo/client";
 
-// Query para obtener los datos de este componente
-const GET_OBRAS_DATA = gql`
-  query {
-    obras {
-      id
-      nombre
-      cliente
-      ubicacion
-      inicio
-      fin
-    }
-  }
-`;
+import { GET_OBRAS } from "../adapters/queries";
 
 function TableRow({ id, nombre, ubicacion, cliente, inicio, fin }) {
   return (
@@ -62,7 +50,7 @@ function Table({ obras }) {
 }
 
 export default function ObrasTable({ extData = null }) {
-  const { loading, error, data } = useQuery(GET_OBRAS_DATA);
+  const { loading, error, data } = useQuery(GET_OBRAS);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 

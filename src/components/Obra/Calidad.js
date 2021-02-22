@@ -1,19 +1,8 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
-const GET_CALIDAD_WITH_ID = gql`
-  query($idObra: ID!) {
-    obra(id: $idObra) {
-      calidad {
-        certificados {
-          url
-          name
-        }
-      }
-    }
-  }
-`;
+import { GET_CALIDAD_WITH_ID } from "../../adapters/queries";
 
 function TableRow({ name, url }) {
   return (
