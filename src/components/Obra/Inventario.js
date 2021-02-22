@@ -10,8 +10,22 @@ const GET_INVENTARIO_WITH_ID = gql`
     obra(id: $idObra) {
       inventario {
         id
-        materials {
+        piping: materials(where: { tipo: "piping" }) {
           diametro_pulg
+          cantidad
+          num_serie
+          tipo
+          material
+        }
+        welding: materials(where: { tipo: "welding" }) {
+          diametro_pulg
+          cantidad
+          num_serie
+          material
+          descripcion
+        }
+        estructural: materials(where: { tipo: "estructural" }) {
+          tipo_perfil
           cantidad
           num_serie
           tipo
