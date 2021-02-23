@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 
+import UploadCalidad from "./UploadCalidad";
 import { GET_CALIDAD_WITH_ID } from "../../adapters/queries";
 
 function TableRow({ name, url }) {
@@ -35,22 +36,25 @@ export default function Calidad() {
   const { certificados } = calidad;
 
   return (
-    <table className="min-w-full bg-white">
-      <thead className="bg-gray-800 text-white">
-        <tr>
-          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Nombre
-          </th>
-          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Descargar
-          </th>
-        </tr>
-      </thead>
-      <tbody className="text-gray-700">
-        {certificados.map((cert) => (
-          <TableRow {...cert} key={cert.url} />
-        ))}
-      </tbody>
-    </table>
+    <React.Fragment>
+      <table className="min-w-full bg-white">
+        <thead className="bg-gray-800 text-white">
+          <tr>
+            <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+              Nombre
+            </th>
+            <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+              Descargar
+            </th>
+          </tr>
+        </thead>
+        <tbody className="text-gray-700">
+          {certificados.map((cert) => (
+            <TableRow {...cert} key={cert.url} />
+          ))}
+        </tbody>
+      </table>
+      <UploadCalidad />
+    </React.Fragment>
   );
 }
