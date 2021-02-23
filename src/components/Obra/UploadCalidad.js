@@ -3,15 +3,30 @@ import { gql, useMutation } from "@apollo/client";
 
 const UPLOAD_FILE = gql`
   mutation($file: Upload!) {
-    upload(file: $file)
+    upload(file: $file) {
+      id
+    }
   }
 `;
 
-export default function UploadCalidad() {
+const UPDATE_CALIDAD_CERTIFICADOS = gql`
+  mutation ModifyCertificados($ids: [ID]!) {
+    updateCalidad(input: { where: { id: 3 }, data: { certificados: $ids } }) {
+      calidad {
+        certificados {
+          id
+        }
+      }
+    }
+  }
+`;
+
+export default function UploadCalidad({ certificados, refetch }) {
   const [name, setName] = React.useState("");
   const [selectedFile, setSelectedFile] = React.useState("");
-
-  const [uploadFile] = useMutation(UPLOAD_FILE);
+  const currIds = certificados.map((cert) => cert.id);
+  const [upload, { loading, error }] = useMutation(UPLOAD_FILE);
+  const [updateCertificados] = useMutation(UPDATE_CALIDAD_CERTIFICADOS);
 
   const handleChange = (e) => {
     setName(e.target.value);
@@ -20,12 +35,22 @@ export default function UploadCalidad() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(selectedFile);
-    uploadFile({
+    upload({
       variables: {
         file: selectedFile,
       },
     })
-      .then(console.log)
+      .then(({ data: { upload } }) => {
+        console.log(`File uploaded! with id ${upload.id}`);
+        const updatedIds = [...currIds, upload.id];
+        updateCertificados({
+          variables: { ids: updatedIds },
+        });
+      })
+      .then(() => {
+        console.log("Update Calidad succesful. Refecthing....");
+        refetch();
+      })
       .catch((error) => {
         console.log("error ha ocurrido");
       });
@@ -34,6 +59,8 @@ export default function UploadCalidad() {
   const handleFileUpload = (e) => {
     setSelectedFile(e.target.files[0]);
   };
+
+  if (error) return <div>{JSON.stringify(error)}</div>;
 
   return (
     <div className="mt-5 md:mt-0 md:col-span-2">
@@ -89,11 +116,9 @@ export default function UploadCalidad() {
                     >
                       <span>Subir archivo</span>
                       <input
-                        id="files"
-                        name="files"
                         type="file"
                         // className="sr-only"
-                        accept="application/pdf"
+                        // accept="application/pdf"
                         onChange={handleFileUpload}
                       />
                     </label>

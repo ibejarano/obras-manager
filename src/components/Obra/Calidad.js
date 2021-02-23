@@ -20,7 +20,7 @@ function TableRow({ name, url }) {
 
 export default function Calidad() {
   const { id } = useParams();
-  const { loading, error, data } = useQuery(GET_CALIDAD_WITH_ID, {
+  const { loading, error, data, refetch } = useQuery(GET_CALIDAD_WITH_ID, {
     variables: {
       idObra: id,
     },
@@ -54,7 +54,7 @@ export default function Calidad() {
           ))}
         </tbody>
       </table>
-      <UploadCalidad />
+      <UploadCalidad certificados={certificados} refetch={refetch} />
     </React.Fragment>
   );
 }

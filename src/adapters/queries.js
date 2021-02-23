@@ -136,6 +136,7 @@ const GET_CALIDAD_WITH_ID = gql`
         certificados {
           url
           name
+          id
         }
       }
     }
