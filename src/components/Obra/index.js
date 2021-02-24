@@ -7,6 +7,8 @@ import Calidad from "./Calidad";
 import PeopleObra from "./People";
 import Planos from "./Planos";
 import Inventario from "./Inventario";
+import Gallery from "./Gallery";
+import ShowGallery from "./Gallery/ShowGallery";
 
 import { GET_OBRAS_WITH_ID } from "../../adapters/queries";
 
@@ -45,6 +47,8 @@ export default function Obra() {
           Cliente: {obra.cliente}
         </p>
         <Switch>
+          <Route path="/:id/galeria/:idGaleria" children={<ShowGallery />} />
+          <Route path="/:id/galeria" children={<Gallery />} />
           <Route path="/:id/personal" children={<PeopleObra />} />
           <Route path="/:id/inventario" children={<Inventario />} />
           <Route path="/:id/calidad" children={<Calidad />} />
@@ -73,8 +77,8 @@ export default function Obra() {
               />
               <PageInfo
                 title="Galeria de fotos"
-                description="No implementado"
-                url="/"
+                description="Fotos de fases de la obra"
+                url={`${id}/galeria`}
               />
             </div>
           </Route>
