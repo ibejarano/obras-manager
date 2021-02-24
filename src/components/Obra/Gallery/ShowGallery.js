@@ -30,9 +30,11 @@ export default function Gallery() {
   return (
     <div>
       <h1>{imagene.descripcion}</h1>
-      {imagene.archivos.map(({ url }) => (
-        <img key={url} src={`http://localhost:1337${url}`} />
-      ))}
+      <div className="flex flex-row flex-wrap justify-center">
+        {imagene.archivos.map(({ url }) => (
+          <img className="w-1/4 object-contain m-2" key={url} src={`http://localhost:1337${url}`} />
+        ))}
+      </div>
     </div>
   );
 }
