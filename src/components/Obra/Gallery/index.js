@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 import { gql, useQuery } from "@apollo/client";
+import UpdatePhotos from "./UpdatePhotos";
 
 const GET_IMAGES_ID = gql`
   query($idObra: ID!) {
@@ -30,7 +31,7 @@ function ImageInfo({ title, idGallery }) {
 
 export default function Gallery() {
   const { id } = useParams();
-  const { loading, error, data } = useQuery(GET_IMAGES_ID, {
+  const { loading, error, data, refetch } = useQuery(GET_IMAGES_ID, {
     variables: {
       idObra: id,
     },
@@ -49,6 +50,7 @@ export default function Gallery() {
       {imagenes.map((img) => (
         <ImageInfo key={img.id} title={img.descripcion} idGallery={img.id} />
       ))}
+      <UpdatePhotos refetch={refetch} />
     </div>
   );
 }
