@@ -113,14 +113,17 @@ const GET_PLANOS_WITH_ID = gql`
     obra(id: $idObra) {
       plano {
         civiles {
+          id
           url
           name
         }
         mecanicos {
+          id
           url
           name
         }
         piping {
+          id
           url
           name
         }
