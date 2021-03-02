@@ -84,6 +84,7 @@ export default function UploadCalidad({ refetch }) {
                     placeholder="Ingrese descripcion de las imagenes"
                     value={name}
                     onChange={handleChange}
+                    required
                   />
                 </div>
               </div>
@@ -121,6 +122,7 @@ export default function UploadCalidad({ refetch }) {
                         // className="sr-only"
                         // accept="application/pdf"
                         onChange={handleFileUpload}
+                        required
                       />
                     </label>
                     <p className="pl-1">o arrastre y suelte</p>

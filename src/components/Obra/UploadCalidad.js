@@ -84,6 +84,7 @@ export default function UploadCalidad({ certificados, refetch }) {
                     placeholder="Ingrese nombre del archivo"
                     value={name}
                     onChange={handleChange}
+                    required
                   />
                 </div>
               </div>
@@ -117,8 +118,9 @@ export default function UploadCalidad({ certificados, refetch }) {
                       <span>Subir archivo</span>
                       <input
                         type="file"
+                        required
                         // className="sr-only"
-                        // accept="application/pdf"
+                        accept="application/pdf"
                         onChange={handleFileUpload}
                       />
                     </label>
