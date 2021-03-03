@@ -1,5 +1,6 @@
 import React from "react";
 import { gql, useMutation } from "@apollo/client";
+import { useParams } from "react-router-dom";
 
 const UPLOAD_FILE = gql`
   mutation($file: Upload!, $text: String!) {
@@ -10,8 +11,10 @@ const UPLOAD_FILE = gql`
 `;
 
 const UPDATE_CALIDAD_CERTIFICADOS = gql`
-  mutation ModifyCertificados($ids: [ID]!) {
-    updateCalidad(input: { where: { id: 3 }, data: { certificados: $ids } }) {
+  mutation ModifyCertificados($idObra: ID!, $ids: [ID]!) {
+    updateCalidad(
+      input: { where: { id: $idObra }, data: { certificados: $ids } }
+    ) {
       calidad {
         certificados {
           id
@@ -21,39 +24,93 @@ const UPDATE_CALIDAD_CERTIFICADOS = gql`
   }
 `;
 
-export default function UploadCalidad({ certificados, refetch }) {
+const UPDATE_CALIDAD_PROCEDIMIENTOS = gql`
+  mutation ModifyProcedimiento($idObra: ID!, $ids: [ID]!) {
+    updateCalidad(
+      input: { where: { id: $idObra }, data: { procedimientos: $ids } }
+    ) {
+      calidad {
+        procedimientos {
+          id
+        }
+      }
+    }
+  }
+`;
+
+const UPDATE_CALIDAD_PLANILLAS = gql`
+  mutation ModifyPlanillas($idObra: ID!, $ids: [ID]!) {
+    updateCalidad(
+      input: { where: { id: $idObra }, data: { planillas: $ids } }
+    ) {
+      calidad {
+        planillas {
+          id
+        }
+      }
+    }
+  }
+`;
+
+export default function UploadCalidad({
+  certificados,
+  procedimientos,
+  planillas,
+  refetch,
+}) {
+  const { id } = useParams();
   const [name, setName] = React.useState("");
+  const [fileType, setFileType] = React.useState("procedimiento");
   const [selectedFile, setSelectedFile] = React.useState("");
-  const currIds = certificados.map((cert) => cert.id);
-  const [upload, { loading, error }] = useMutation(UPLOAD_FILE);
+  const [uploadFile, { loading, error }] = useMutation(UPLOAD_FILE);
   const [updateCertificados] = useMutation(UPDATE_CALIDAD_CERTIFICADOS);
+  const [updatePlanillas] = useMutation(UPDATE_CALIDAD_PLANILLAS);
+  const [updateProcedimientos] = useMutation(UPDATE_CALIDAD_PROCEDIMIENTOS);
 
   const handleChange = (e) => {
     setName(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    upload({
+    const {
+      data: { upload },
+    } = await uploadFile({
       variables: {
         file: selectedFile,
         text: name,
       },
-    })
-      .then(({ data: { upload } }) => {
-        console.log(`File uploaded! with id ${upload.id}`);
-        const updatedIds = [...currIds, upload.id];
-        updateCertificados({
-          variables: { ids: updatedIds },
+    });
+
+    let updateIds;
+    let currIds;
+    switch (fileType) {
+      case "procedimiento":
+        currIds = procedimientos.map((p) => p.id);
+        updateIds = [...currIds, upload.id];
+        updateProcedimientos({
+          variables: { ids: updateIds, idObra: id },
         });
-      })
-      .then(() => {
-        console.log("Update Calidad succesful. Refecthing....");
-        refetch();
-      })
-      .catch((error) => {
-        console.log("error ha ocurrido");
-      });
+        break;
+
+      case "planilla":
+        currIds = planillas.map((p) => p.id);
+        updateIds = [...currIds, upload.id];
+        updatePlanillas({
+          variables: { ids: updateIds, idObra: id },
+        });
+        break;
+      case "certificado":
+        currIds = certificados.map((p) => p.id);
+        updateIds = [...currIds, upload.id];
+        updateCertificados({
+          variables: { ids: updateIds, idObra: id },
+        });
+        break;
+      default:
+        break;
+    }
+    refetch();
   };
 
   const handleFileUpload = (e) => {
@@ -70,7 +127,7 @@ export default function UploadCalidad({ certificados, refetch }) {
             <div className="grid grid-cols-3 gap-6">
               <div className="col-span-3 sm:col-span-2">
                 <label
-                  htmlFor="company_website"
+                  htmlFor="nombre_archivo"
                   className="block text-sm font-medium text-gray-700"
                 >
                   Nombre del archivo
@@ -79,13 +136,28 @@ export default function UploadCalidad({ certificados, refetch }) {
                   <input
                     type="text"
                     name="nombre"
-                    id="company_website"
+                    id="nombre_archivo"
                     className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
                     placeholder="Ingrese nombre del archivo"
                     value={name}
                     onChange={handleChange}
                     required
                   />
+                </div>
+              </div>
+              <div className="col-span-3 sm:col-span-2">
+                <label
+                  htmlFor="tipo_archivo"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Nombre del archivo
+                </label>
+                <div className="mt-1 flex rounded-md shadow-sm">
+                  <select onChange={(e) => setFileType(e.target.value)}>
+                    <option value="procedimiento">Procedimiento</option>
+                    <option value="planilla">Planilla</option>
+                    <option value="certificado">Certificado</option>
+                  </select>
                 </div>
               </div>
             </div>

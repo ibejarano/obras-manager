@@ -141,6 +141,21 @@ const GET_CALIDAD_WITH_ID = gql`
           name
           caption
           id
+          created_at
+        }
+        planillas {
+          url
+          name
+          caption
+          id
+          created_at
+        }
+        procedimientos {
+          url
+          name
+          caption
+          created_at
+          id
         }
       }
     }

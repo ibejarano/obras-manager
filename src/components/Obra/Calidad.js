@@ -5,19 +5,49 @@ import { useQuery } from "@apollo/client";
 import UploadCalidad from "./UploadCalidad";
 import { GET_CALIDAD_WITH_ID } from "../../adapters/queries";
 
-function TableRow({ name, url, caption }) {
+function TableRow({ name, url, caption, created_at }) {
+  const created = new Date(created_at)
   return (
     <tr className="bg-gray-200">
       <td className="w-1/3 text-left py-3 px-4">{name}</td>
       <td className="w-1/3 text-left py-3 px-4">
         {caption || "Sin Descripcion"}
       </td>
+      <td className="w-1/3 text-left py-3 px-4">{created.toLocaleDateString("es-AR")}</td>
       <td className="w-1/3 text-left py-3 px-4">
         <a target="_blank" href={"http://localhost:1337" + url}>
           GET
         </a>
       </td>
     </tr>
+  );
+}
+
+function Tabla({ data }) {
+  return (
+    <table className="min-w-full bg-white">
+      <thead className="bg-gray-800 text-white">
+        <tr>
+          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+            Nombre
+          </th>
+          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+            Descripcion
+          </th>
+          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+            Fecha de carga
+          </th>
+          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+            Descargar
+          </th>
+        </tr>
+      </thead>
+      <tbody className="text-gray-700">
+        {data.map((row) => (
+          <TableRow {...row} key={row.url} />
+        ))}
+      </tbody>
+    </table>
   );
 }
 
@@ -35,7 +65,7 @@ function Modal({ children }) {
       {open && (
         <div className="modal fixed w-full h-full top-0 left-0 flex items-center justify-center">
           <div className="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-          
+
           <div className="modal-container bg-white mx-auto rounded shadow-lg z-50 overflow-y-auto">
             <div className="modal-content py-4 text-left px-6">
               <div className="flex justify-between items-center pb-3">
@@ -77,32 +107,15 @@ export default function Calidad() {
     obra: { calidad },
   } = data;
 
-  const { certificados } = calidad;
+  const { certificados, procedimientos, planillas } = calidad;
 
   return (
     <React.Fragment>
-      <table className="min-w-full bg-white">
-        <thead className="bg-gray-800 text-white">
-          <tr>
-            <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-              Nombre
-            </th>
-            <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-              Descripcion
-            </th>
-            <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-              Descargar
-            </th>
-          </tr>
-        </thead>
-        <tbody className="text-gray-700">
-          {certificados.map((cert) => (
-            <TableRow {...cert} key={cert.url} />
-          ))}
-        </tbody>
-      </table>
+      <Tabla data={certificados} />
+      <Tabla data={procedimientos} />
+      <Tabla data={planillas} />
       <Modal>
-        <UploadCalidad certificados={certificados} refetch={refetch} />
+        <UploadCalidad {...calidad} refetch={refetch} />
       </Modal>
     </React.Fragment>
   );
