@@ -2,8 +2,8 @@ import React from "react";
 import { gql, useMutation } from "@apollo/client";
 
 const UPLOAD_FILE = gql`
-  mutation($file: Upload!) {
-    upload(file: $file) {
+  mutation($file: Upload!, $text: String!) {
+    upload(file: $file, info: { caption: $text }) {
       id
     }
   }
@@ -34,10 +34,10 @@ export default function UploadCalidad({ certificados, refetch }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(selectedFile);
     upload({
       variables: {
         file: selectedFile,
+        text: name,
       },
     })
       .then(({ data: { upload } }) => {
