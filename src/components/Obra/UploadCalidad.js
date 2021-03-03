@@ -88,7 +88,7 @@ export default function UploadCalidad({
       case "procedimiento":
         currIds = procedimientos.map((p) => p.id);
         updateIds = [...currIds, upload.id];
-        updateProcedimientos({
+        await updateProcedimientos({
           variables: { ids: updateIds, idObra: id },
         });
         break;
@@ -96,14 +96,14 @@ export default function UploadCalidad({
       case "planilla":
         currIds = planillas.map((p) => p.id);
         updateIds = [...currIds, upload.id];
-        updatePlanillas({
+        await updatePlanillas({
           variables: { ids: updateIds, idObra: id },
         });
         break;
       case "certificado":
         currIds = certificados.map((p) => p.id);
         updateIds = [...currIds, upload.id];
-        updateCertificados({
+        await updateCertificados({
           variables: { ids: updateIds, idObra: id },
         });
         break;
@@ -187,16 +187,13 @@ export default function UploadCalidad({
                       htmlFor="file-upload"
                       className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                     >
-                      <span>Subir archivo</span>
                       <input
                         type="file"
                         required
-                        // className="sr-only"
                         accept="application/pdf"
                         onChange={handleFileUpload}
                       />
                     </label>
-                    <p className="pl-1">o arrastre y suelte</p>
                   </div>
                   <p className="text-xs text-gray-500">PDF maximo 10MB</p>
                 </div>
