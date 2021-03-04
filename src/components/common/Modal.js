@@ -1,14 +1,14 @@
 import React from "react";
 
-export default function Modal({ children }) {
+export default function Modal({ children, legend="Agregar archivos" }) {
   const [open, setOpen] = React.useState(false);
   return (
-    <div className="bg-gray-200 flex items-center justify-center h-screen">
+    <div className="bg-gray-200 flex items-center justify-center">
       <button
         onClick={() => setOpen(true)}
         className="modal-open bg-transparent border border-gray-500 hover:border-indigo-500 text-gray-500 hover:text-indigo-500 font-bold py-2 px-4 rounded-full"
       >
-        Agregar archivos
+        {legend}
       </button>
 
       {open && (

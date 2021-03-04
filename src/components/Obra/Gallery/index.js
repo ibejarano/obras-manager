@@ -2,6 +2,7 @@ import React from "react";
 import { useParams, Link } from "react-router-dom";
 import { gql, useQuery } from "@apollo/client";
 import UpdatePhotos from "./UpdatePhotos";
+import Modal from "../../common/Modal";
 
 const GET_IMAGES_ID = gql`
   query($idObra: ID!) {
@@ -37,8 +38,6 @@ export default function Gallery() {
     },
   });
 
-  // console.log(idObra);
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
   const {
@@ -50,7 +49,9 @@ export default function Gallery() {
       {imagenes.map((img) => (
         <ImageInfo key={img.id} title={img.descripcion} idGallery={img.id} />
       ))}
-      <UpdatePhotos refetch={refetch} />
+      <Modal legend="Subir fotos">
+        <UpdatePhotos refetch={refetch} />
+      </Modal>
     </div>
   );
 }

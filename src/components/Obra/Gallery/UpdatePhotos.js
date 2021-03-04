@@ -42,8 +42,6 @@ export default function UploadCalidad({ refetch }) {
       variables: { file: selectedFiles },
     });
 
-    console.log(multipleUpload);
-
     const imgIds = multipleUpload.multipleUpload.map((img) => img.id);
 
     await updateObra({
@@ -64,7 +62,6 @@ export default function UploadCalidad({ refetch }) {
 
   return (
     <div className="mt-5 md:mt-0 md:col-span-2">
-      <h1>Subir imagenes</h1>
       <form onSubmit={handleSubmit}>
         <div className="shadow sm:rounded-md sm:overflow-hidden">
           <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
@@ -74,14 +71,14 @@ export default function UploadCalidad({ refetch }) {
                   htmlFor="company_website"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Descripcion
+                  Titulo
                 </label>
                 <div className="mt-1 flex rounded-md shadow-sm">
                   <input
                     type="text"
                     name="nombre"
                     className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
-                    placeholder="Ingrese descripcion de las imagenes"
+                    placeholder="Ejemplo: 'Fase de Excavacion'"
                     value={name}
                     onChange={handleChange}
                     required
@@ -115,19 +112,15 @@ export default function UploadCalidad({ refetch }) {
                       htmlFor="file-upload"
                       className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                     >
-                      <span>Subir archivo</span>
                       <input
                         type="file"
                         multiple
-                        // className="sr-only"
-                        // accept="application/pdf"
                         onChange={handleFileUpload}
                         required
                       />
                     </label>
-                    <p className="pl-1">o arrastre y suelte</p>
                   </div>
-                  <p className="text-xs text-gray-500">Solo archivos JPG/PNG</p>
+                  <p className="text-xs text-gray-500">Archivos JPG/PNG</p>
                 </div>
               </div>
             </div>
