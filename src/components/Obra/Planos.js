@@ -2,7 +2,8 @@ import React from "react";
 import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 
-import UploadPlanos from './UploadPlanos'
+import UploadPlanos from "./UploadPlanos";
+import Modal from "../common/Modal";
 import { GET_PLANOS_WITH_ID } from "../../adapters/queries";
 
 function TableRow({ name, url, tipo }) {
@@ -64,7 +65,9 @@ export default function Planos() {
           ))}
         </tbody>
       </table>
-      <UploadPlanos plano={plano} refetch={refetch} />
+      <Modal>
+        <UploadPlanos plano={plano} refetch={refetch} />
+      </Modal>
     </React.Fragment>
   );
 }
