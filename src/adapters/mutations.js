@@ -83,4 +83,96 @@ const CREATE_ESTRUCTURAL_ENTRY = gql`
   }
 `;
 
-export { CREATE_ESTRUCTURAL_ENTRY, CREATE_PIPING_ENTRY, CREATE_WELDING_ENTRY };
+// CALIDAD MUTATIONS
+
+const UPDATE_CALIDAD_CERTIFICADOS = gql`
+  mutation ModifyCertificados($idObra: ID!, $ids: [ID]!) {
+    updateCalidad(
+      input: { where: { id: $idObra }, data: { certificados: $ids } }
+    ) {
+      calidad {
+        certificados {
+          id
+        }
+      }
+    }
+  }
+`;
+
+const UPDATE_CALIDAD_PROCEDIMIENTOS = gql`
+  mutation ModifyProcedimiento($idObra: ID!, $ids: [ID]!) {
+    updateCalidad(
+      input: { where: { id: $idObra }, data: { procedimientos: $ids } }
+    ) {
+      calidad {
+        procedimientos {
+          id
+        }
+      }
+    }
+  }
+`;
+
+const UPDATE_CALIDAD_PLANILLAS = gql`
+  mutation ModifyPlanillas($idObra: ID!, $ids: [ID]!) {
+    updateCalidad(
+      input: { where: { id: $idObra }, data: { planillas: $ids } }
+    ) {
+      calidad {
+        planillas {
+          id
+        }
+      }
+    }
+  }
+`;
+
+// PLANOS MUTATIONS
+
+const UPDATE_PLANO_MECANICO = gql`
+  mutation ModifyCertificados($idObra: ID!, $ids: [ID]!) {
+    updatePlano(input: { where: { id: $idObra }, data: { mecanicos: $ids } }) {
+      plano {
+        mecanicos {
+          id
+        }
+      }
+    }
+  }
+`;
+
+const UPDATE_PLANO_CIVIL = gql`
+  mutation ModifyCertificados($idObra: ID!, $ids: [ID]!) {
+    updatePlano(input: { where: { id: $idObra }, data: { civiles: $ids } }) {
+      plano {
+        civiles {
+          id
+        }
+      }
+    }
+  }
+`;
+
+const UPDATE_PLANO_PIPING = gql`
+  mutation ModifyCertificados($idObra: ID!, $ids: [ID]!) {
+    updatePlano(input: { where: { id: $idObra }, data: { piping: $ids } }) {
+      plano {
+        piping {
+          id
+        }
+      }
+    }
+  }
+`;
+
+export {
+  CREATE_ESTRUCTURAL_ENTRY,
+  CREATE_PIPING_ENTRY,
+  CREATE_WELDING_ENTRY,
+  UPDATE_CALIDAD_CERTIFICADOS,
+  UPDATE_CALIDAD_PROCEDIMIENTOS,
+  UPDATE_CALIDAD_PLANILLAS,
+  UPDATE_PLANO_CIVIL,
+  UPDATE_PLANO_MECANICO,
+  UPDATE_PLANO_PIPING,
+};
