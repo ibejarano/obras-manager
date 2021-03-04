@@ -1,27 +1,28 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-
 import UploadCalidad from "./UploadCalidad";
-import Modal from '../common/Modal'
+import Modal from "../common/Modal";
 import { GET_CALIDAD_WITH_ID } from "../../adapters/queries";
 
 function TableRow({ name, url, caption, created_at }) {
-  const created = new Date(created_at)
+  const created = new Date(created_at);
   return (
     <tr className="bg-gray-200">
       <td className="w-1/3 text-left py-3 px-4">{name}</td>
       <td className="w-1/3 text-left py-3 px-4">
         {caption || "Sin Descripcion"}
       </td>
-      <td className="w-1/3 text-left py-3 px-4">{created.toLocaleDateString("es-AR")}</td>
+      <td className="w-1/3 text-left py-3 px-4">
+        {created.toLocaleDateString("es-AR")}
+      </td>
       <td className="w-1/3 text-left py-3 px-4">
         <a target="_blank" href={"http://localhost:1337" + url}>
           GET
         </a>
       </td>
     </tr>
-  );
+  );  
 }
 
 function Tabla({ data }) {
@@ -51,7 +52,6 @@ function Tabla({ data }) {
     </table>
   );
 }
-
 
 export default function Calidad() {
   const { id } = useParams();

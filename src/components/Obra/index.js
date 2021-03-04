@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
-
 import { useParams, Link, Route, Switch } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 import Calidad from "./Calidad";
 import PeopleObra from "./People";
@@ -83,6 +83,7 @@ export default function Obra() {
             </div>
           </Route>
         </Switch>
+        <ToastContainer />
       </div>
     </div>
   );

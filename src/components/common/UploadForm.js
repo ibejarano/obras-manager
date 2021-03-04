@@ -1,6 +1,9 @@
 import React from "react";
 import { gql, useMutation } from "@apollo/client";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFilePdf, faFolderOpen } from "@fortawesome/free-solid-svg-icons";
 
 const UPLOAD_FILE = gql`
   mutation($file: Upload!, $text: String!) {
@@ -20,35 +23,49 @@ export default function UploadCalidad({
   const [name, setName] = React.useState("");
   const [fileType, setFileType] = React.useState(valTypes[0]);
   const [selectedFile, setSelectedFile] = React.useState("");
+  const [fileInfo, setFileInfo] = React.useState(null);
   const [uploadFile, { loading, error }] = useMutation(UPLOAD_FILE);
 
   const handleChange = (e) => {
-      setName(e.target.value);
-    };
-    
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const {
-            data: { upload },
-        } = await uploadFile({
-            variables: {
-                file: selectedFile,
-                text: name,
-            },
-        });
-        
-    const ind = valTypes.indexOf(fileType);
-    const currIds = prevValues[ind].map((p) => p.id);
-    const updateIds = [...currIds, upload.id];
-    const updateRegistry = mutations[ind]
-    await updateRegistry({
+    setName(e.target.value);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const {
+        data: { upload },
+      } = await uploadFile({
+        variables: {
+          file: selectedFile,
+          text: name,
+        },
+      });
+
+      const ind = valTypes.indexOf(fileType);
+      const currIds = prevValues[ind].map((p) => p.id);
+      const updateIds = [...currIds, upload.id];
+      const updateRegistry = mutations[ind];
+      await updateRegistry({
         variables: { ids: updateIds, idObra: id },
-    });
-    refetch();
+      });
+      toast.success("Archivos subidos satisfactoriamente.");
+      setName("");
+      setSelectedFile("");
+      refetch();
+    } catch {
+      toast.error("ERROR: No se subieron los archivos");
+    }
   };
 
   const handleFileUpload = (e) => {
+    setFileInfo({
+      name: e.target.files[0].name,
+      size: e.target.files[0].size,
+    });
     setSelectedFile(e.target.files[0]);
+    e.target.value = null;
   };
 
   if (error) return <div>{JSON.stringify(error)}</div>;
@@ -104,32 +121,37 @@ export default function UploadCalidad({
               </label>
               <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                 <div className="space-y-1 text-center">
-                  <svg
-                    className="mx-auto h-12 w-12 text-gray-400"
-                    stroke="currentColor"
-                    fill="none"
-                    viewBox="0 0 48 48"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                  {!fileInfo && (
+                    <FontAwesomeIcon
+                      size="3x"
+                      icon={faFolderOpen}
+                      transform="shrink-6 left-4"
                     />
-                  </svg>
-                  <div className="flex text-sm text-gray-600">
+                  )}
+                  {fileInfo && (
+                    <div>
+                      <FontAwesomeIcon size="3x" icon={faFilePdf} />
+                      <p className="text-sm text-gray-500">
+                        {fileInfo.name} <br /> Tamaño:
+                        {(fileInfo.size / 1024).toFixed(1)} kB
+                      </p>
+                    </div>
+                  )}
+                  <div className="flex justify-center text-sm text-gray-600">
                     <label
                       htmlFor="file-upload"
-                      className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                      className="relative cursor-pointer bg-white rounded-lg bg-indigo-600 p-2 font-medium text-white hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                     >
-                      <input
-                        type="file"
-                        required
-                        accept="application/pdf"
-                        onChange={handleFileUpload}
-                      />
+                      Seleccione archivo
                     </label>
+                    <input
+                      id="file-upload"
+                      type="file"
+                      required
+                      accept="application/pdf"
+                      className="hidden"
+                      onChange={handleFileUpload}
+                    />
                   </div>
                   <p className="text-xs text-gray-500">PDF maximo 10MB</p>
                 </div>
