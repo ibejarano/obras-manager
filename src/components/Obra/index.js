@@ -42,10 +42,10 @@ export default function Obra() {
   return (
     <div className="w-full flex flex-col h-screen overflow-y-hidden">
       <div className="w-full overflow-x-hidden border-t flex flex-col p-6">
-        <h1 className="text-3xl text-black pb-6">Obra: {obra.nombre}</h1>
-        <p className="text-xl pb-3 flex items-center">
-          Cliente: {obra.cliente}
-        </p>
+        <div className="sticky top-0 p-4 w-full flex flex-row justify-between items-center bg-purple-600 text-white">
+          <h1 className="text-3xl">Obra: {obra.nombre}</h1>
+          <p className="text-xl ">Cliente: {obra.cliente}</p>
+        </div>
         <Switch>
           <Route path="/:id/galeria/:idGaleria" children={<ShowGallery />} />
           <Route path="/:id/galeria" children={<Gallery />} />

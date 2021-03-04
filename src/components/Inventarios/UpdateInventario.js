@@ -43,7 +43,7 @@ function SelectField({ newItem, handleChange }) {
         onChange={handleChange}
         value={newItem[field]}
       >
-        <option selected disabled value="">
+        <option disabled value="disabled">
           -Seleccione uno-
         </option>
         {optionsList.map((d) => (
@@ -91,10 +91,10 @@ function RadioButtons({ selected, handleCheck }) {
 export default function AddPipingMaterial({ setOpen, idInventario, refetch }) {
   const [newItem, setNewItem] = React.useState({
     descripcion: "",
-    diametro_pulg: "8",
-    cantidad: "34.341",
-    material: "api60xl",
-    num_serie: "lls918",
+    diametro_pulg: "disabled",
+    cantidad: "",
+    material: "",
+    num_serie: "",
     mat_type: "piping",
     tipo_perfil: "",
   });

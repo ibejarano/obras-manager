@@ -112,9 +112,9 @@ function EstructTable({ materiales }) {
 
 export default function InventarioObra({ obra, piping, estructural, welding }) {
   return (
-    <React.Fragment>
+    <div>
       {obra && (
-        <h1 className="text-xl pb-3 flex items-center">{obra.nombre}</h1>
+        <h1 className="sticky top-0 text-xl pb-3 flex items-center">{obra.nombre}</h1>
       )}
       {piping.length > 0 && (
         <div className="w-full mt-12">
@@ -147,6 +147,6 @@ export default function InventarioObra({ obra, piping, estructural, welding }) {
           </div>
         </div>
       )}
-    </React.Fragment>
+    </div>
   );
 }
