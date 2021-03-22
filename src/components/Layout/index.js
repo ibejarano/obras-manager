@@ -1,53 +1,53 @@
 import React from "react";
-
+import {
+  Grid,
+  GridItem,
+  Avatar,
+  Menu,
+  MenuList,
+  MenuButton,
+  MenuItem,
+} from "@chakra-ui/react";
 import SideBar from "./sidebar";
 
-function UserIcon({ isOpen, setIsOpen }) {
+function UserIcon() {
   return (
-    <header className="w-full items-center bg-white py-2 px-6 hidden sm:flex">
-      <div className="w-1/2"></div>
-      <div className="relative w-1/2 flex justify-end">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="realtive z-10 w-12 h-12 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none"
-        >
-          <img src="https://source.unsplash.com/uJ8LNVCBjFQ/400x400" />
-        </button>
-        {isOpen && (
-          <div className="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
-            <a
-              href="#"
-              className="block px-4 py-2 account-link hover:text-white"
-            >
-              Account
-            </a>
-            <a
-              href="#"
-              className="block px-4 py-2 account-link hover:text-white"
-            >
-              Support
-            </a>
-            <a
-              href="#"
-              className="block px-4 py-2 account-link hover:text-white"
-            >
-              Sign Out
-            </a>
-          </div>
-        )}
-      </div>
-    </header>
+    <Menu>
+      <MenuButton>
+        <Avatar
+          size="xl"
+          name="Dan Abrahmov"
+          src="https://source.unsplash.com/uJ8LNVCBjFQ/400x400"
+          loading="lazy"
+        />
+      </MenuButton>
+      <MenuList>
+        <MenuItem>Cuenta</MenuItem>
+        <MenuItem>Soporte</MenuItem>
+        <MenuItem>Salir</MenuItem>
+      </MenuList>
+    </Menu>
   );
 }
 
-export default function Layout({ children, isOpen, setIsOpen }) {
+export default function Layout({ children }) {
   return (
-    <div className="bg-gray-100 font-family-karla flex">
-      <SideBar />
-      <div className="w-full flex flex-col h-screen overflow-y-hidden">
-        <UserIcon isOpen={isOpen} setIsOpen={setIsOpen} />
+    <Grid
+      h="100vh"
+      w="100vw"
+      templateRows="100px 1fr"
+      templateColumns="240px 1fr"
+      gap={4}
+    >
+      <GridItem rowSpan={2} colSpan={1} bg="tomato">
+        <SideBar />
+      </GridItem>
+      <GridItem colSpan={1} bg="papayawhip">
+        <UserIcon />
+      </GridItem>
+      <GridItem colSpan={1} bg="tomato">
         {children}
-      </div>
-    </div>
+      </GridItem>
+    </Grid>
   );
 }

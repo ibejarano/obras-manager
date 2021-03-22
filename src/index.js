@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "react-toastify/dist/ReactToastify.css";
+import { ChakraProvider } from "@chakra-ui/react";
 
 import {
   ApolloClient,
@@ -28,8 +29,8 @@ const authLink = setContext((_, { headers }) => {
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjEzNDE5MjcyLCJleHAiOjE2MTYwMTEyNzJ9.a58aDI8IMasGsBNK7-467jzEmPfBgYjd-TuGpugSjDA";
   return {
     headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      ...headers
+      // authorization: token ? `Bearer ${token}` : "",
     },
   };
 });
@@ -41,9 +42,11 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <React.StrictMode>
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
+    <ChakraProvider>
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>
+    </ChakraProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

@@ -33,7 +33,7 @@ function App() {
           </Route>
           <Route path="/">
             <ObrasTable />
-            <EventsTable />
+            {/* <EventsTable /> */}
           </Route>
         </Switch>
       </Layout>

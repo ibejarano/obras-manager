@@ -2,61 +2,52 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 
+import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 import { GET_OBRAS } from "../adapters/queries";
 
 function TableRow({ id, nombre, ubicacion, cliente, inicio, fin }) {
   return (
-    <tr className="bg-gray-200">
-      <td className="w-1/3 text-left py-3 px-4">
+    <Tr>
+      <Td>
         <Link to={"/" + id}>{nombre}</Link>
-      </td>
-      <td className="w-1/3 text-left py-3 px-4">{cliente}</td>
-      <td className="text-left py-3 px-4">{ubicacion}</td>
-      <td className="text-left py-3 px-4">{inicio}</td>
-      <td className="text-left py-3 px-4">{fin}</td>
-    </tr>
+      </Td>
+      <Td>{cliente}</Td>
+      <Td>{ubicacion}</Td>
+      <Td>{inicio}</Td>
+      <Td>{fin}</Td>
+    </Tr>
   );
 }
 
-function Table({ obras }) {
+function TableObra({ obras }) {
   return (
-    <table className="min-w-full bg-white">
-      <thead className="bg-gray-800 text-white">
-        <tr>
-          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Nombre
-          </th>
-          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Cliente
-          </th>
-          <th className="text-left py-3 px-4 uppercase font-semibold text-sm">
-            Ubicacion
-          </th>
-          <th className="text-left py-3 px-4 uppercase font-semibold text-sm">
-            Inicio
-          </th>
-          <th className="text-left py-3 px-4 uppercase font-semibold text-sm">
-            Fin
-          </th>
-        </tr>
-      </thead>
-      <tbody className="text-gray-700">
+    <Table variant="striped" colorScheme="twitter">
+      <Thead>
+        <Tr>
+          <Th>Nombre</Th>
+          <Th>Cliente</Th>
+          <Th>Ubicacion</Th>
+          <Th>Inicio</Th>
+          <Th>Fin</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
         {obras.map((obra) => (
           <TableRow {...obra} key={obra.nombre} />
         ))}
-      </tbody>
-    </table>
+      </Tbody>
+    </Table>
   );
 }
 
-export default function ObrasTable({ extData = null }) {
+export default function ObrasTable() {
   const { loading, error, data } = useQuery(GET_OBRAS);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
   const { obras } = data;
   return (
-    <div className="w-full flex flex-col h-screen overflow-y-hidden">
+    <div>
       <div className="w-full overflow-x-hidden border-t flex flex-col">
         <main className="w-full flex-grow p-6">
           <h1 className="text-3xl text-black pb-6">Obras</h1>
@@ -65,7 +56,7 @@ export default function ObrasTable({ extData = null }) {
               <i className="fas fa-list mr-3"></i> Activas
             </p>
             <div className="bg-white overflow-auto">
-              <Table obras={obras} />
+              <TableObra obras={obras} />
             </div>
           </div>
         </main>
