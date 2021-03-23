@@ -16,7 +16,7 @@ function UserIcon() {
       <MenuButton>
         <Avatar
           size="xl"
-          name="Dan Abrahmov"
+          name="Ignacio Bejarano"
           src="https://source.unsplash.com/uJ8LNVCBjFQ/400x400"
           loading="lazy"
         />
@@ -36,7 +36,7 @@ export default function Layout({ children }) {
       h="100vh"
       w="100vw"
       templateRows="1fr"
-      templateColumns="240px 1fr"
+      templateColumns="200px 1fr"
       gap={4}
       p={6}
       bg="cyan.900"

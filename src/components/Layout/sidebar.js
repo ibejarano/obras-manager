@@ -1,38 +1,91 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { Flex, Spacer, Text, Center, Box } from "@chakra-ui/react";
+import {
+  Text,
+  VStack,
+  HStack,
+  Divider,
+  Heading,
+  Flex,
+  Avatar,
+  Box,
+  Badge,
+} from "@chakra-ui/react";
+
+import {
+  HamburgerIcon,
+  CalendarIcon,
+  CopyIcon,
+  ChatIcon,
+} from "@chakra-ui/icons";
 
 const sections = [
-  { name: "Dashboard", slug: "/" },
-  { name: "Personal Obra", slug: "/personal" },
-  { name: "Inventario", slug: "/inventarios" },
-  { name: "Mensajes", slug: "/mensajes" },
+  { name: "Dashboard", slug: "/", icon: <HamburgerIcon color="white" /> },
+  {
+    name: "Personal Obra",
+    slug: "/personal",
+    icon: <CalendarIcon color="white" />,
+  },
+  {
+    name: "Inventario",
+    slug: "/inventarios",
+    icon: <CopyIcon color="white" />,
+  },
+  {
+    name: "Mensajes",
+    slug: "/mensajes",
+    icon: <ChatIcon color="white" />,
+  },
 ];
 
 function SectionLink({ name, slug }) {
   return <Link to={slug}>{name}</Link>;
 }
 
+function UserAvatar() {
+  return (
+    <Flex color="white">
+      <Avatar
+        name="Ignacio Bejarano"
+        loading="lazy"
+        // src="https://bit.ly/sage-adebayo"
+      />
+      <Box ml="3">
+        <Text fontWeight="bold">Ignacio Sebastian Bejarano</Text>
+        <Text fontSize="sm">Administrador</Text>
+      </Box>
+    </Flex>
+  );
+}
+
 export default function SideBar() {
   return (
-    <Flex direction="column" height="100%">
-      <Center m="4">
-        <Text fontSize="3xl" color="white">
-          Username
-        </Text>
-      </Center>
+    <VStack align="flex-start" spacing={6}>
+      <UserAvatar />
+      <Heading size="sm" color="white">
+        Section A
+      </Heading>
       {sections.map((section) => (
-        <Center m="4">
-          <Text fontSize="xl" color="white">
+        <Flex>
+          {section.icon}
+          <Text fontSize="sm" color="white" mx={2}>
             <SectionLink key={section.name} {...section} />
           </Text>
-        </Center>
+        </Flex>
       ))}
-      <Spacer />
-      <Center>
-        <Text fontSize="3xl" color="white">Salir</Text>
-      </Center>
-    </Flex>
+      <Divider />
+      <Heading size="sm" color="white">
+        Section B
+      </Heading>
+      {sections.map((section) => (
+        <Flex>
+          {section.icon}
+          <Text fontSize="sm" color="white" mx={2}>
+            <SectionLink key={section.name} {...section} />
+          </Text>
+        </Flex>
+      ))}
+    </VStack>
   );
 }
