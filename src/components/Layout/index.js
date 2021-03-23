@@ -35,17 +35,16 @@ export default function Layout({ children }) {
     <Grid
       h="100vh"
       w="100vw"
-      templateRows="100px 1fr"
+      templateRows="1fr"
       templateColumns="240px 1fr"
       gap={4}
+      p={6}
+      bg="cyan.900"
     >
-      <GridItem rowSpan={2} colSpan={1} bg="tomato">
+      <GridItem rowSpan={1} colSpan={1}>
         <SideBar />
       </GridItem>
-      <GridItem colSpan={1} bg="papayawhip">
-        <UserIcon />
-      </GridItem>
-      <GridItem colSpan={1} bg="tomato">
+      <GridItem colSpan={1} bg="white" borderRadius={10} >
         {children}
       </GridItem>
     </Grid>
