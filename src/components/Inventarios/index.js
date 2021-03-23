@@ -11,15 +11,11 @@ export default function Inventarios() {
 
   const { inventarios } = data;
   return (
-    <div className="w-full flex flex-col h-screen overflow-y-hidden">
-      <div className="w-full overflow-x-hidden border-t flex flex-col">
-        <main className="w-full flex-grow p-6">
-          <h1 className="text-3xl text-black pb-6">Inventario</h1>
-          {inventarios.map((inventario) => (
-            <InventarioObra key={inventario.obra.nombre} {...inventario} />
-          ))}
-        </main>
-      </div>
-    </div>
+    <main>
+      <h1>Inventario</h1>
+      {inventarios.map((inventario) => (
+        <InventarioObra key={inventario.obra.nombre} {...inventario} />
+      ))}
+    </main>
   );
 }

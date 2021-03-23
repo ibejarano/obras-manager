@@ -23,7 +23,7 @@ export default function Inventario() {
 
   return (
     <React.Fragment>
-      <button className="sticky top-14 p-2 rounded-lg w-40 text-white bg-purple-600" onClick={() => setOpenAddInv(true)}>Agregar material</button>
+      <button onClick={() => setOpenAddInv(true)}>Agregar material</button>
       <InventarioObra {...inventario} />
       {openAddInv && (
         <UpdateInventario

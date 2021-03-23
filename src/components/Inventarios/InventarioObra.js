@@ -1,5 +1,7 @@
 import React from "react";
 
+import { Table, Thead, Tbody, Td, Tr, Th } from "@chakra-ui/react";
+
 function TableRow({
   diametro_pulg,
   cantidad,
@@ -9,140 +11,108 @@ function TableRow({
   descripcion,
 }) {
   return (
-    <tr className="bg-gray-200">
-      {descripcion && (
-        <td className="w-1/3 text-left py-3 px-4">{descripcion}</td>
-      )}
-      <td className="w-1/3 text-left py-3 px-4">
-        {diametro_pulg || tipo_perfil}
-      </td>
-      <td className="w-1/3 text-left py-3 px-4">{cantidad}</td>
-      <td className="text-left py-3 px-4">{material || "-"}</td>
-      <td className="text-left py-3 px-4">{num_serie || "-"}</td>
-    </tr>
+    <Tr>
+      {descripcion && <Td>{descripcion}</Td>}
+      <Td>{diametro_pulg || tipo_perfil}</Td>
+      <Td>{cantidad}</Td>
+      <Td>{material || "-"}</Td>
+      <Td>{num_serie || "-"}</Td>
+    </Tr>
   );
 }
 
 function PipingTable({ materiales }) {
   return (
-    <table className="min-w-full bg-white">
-      <thead className="bg-gray-800 text-white">
-        <tr>
-          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Diametro [pulg]
-          </th>
-          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Cantidad [metros]
-          </th>
-          <th className="text-left py-3 px-4 uppercase font-semibold text-sm">
-            Material
-          </th>
-          <th className="text-left py-3 px-4 uppercase font-semibold text-sm">
-            Serie
-          </th>
-        </tr>
-      </thead>
-      <tbody className="text-gray-700">
+    <Table>
+      <Thead>
+        <Tr>
+          <Th>Diametro [pulg]</Th>
+          <Th>Cantidad [metros]</Th>
+          <Th>Material</Th>
+          <Th>Serie</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
         {materiales.map((material, idx) => (
           <TableRow key={idx} {...material} />
         ))}
-      </tbody>
-    </table>
+      </Tbody>
+    </Table>
   );
 }
 
 function WeldingTable({ materiales }) {
   return (
-    <table className="min-w-full bg-white">
-      <thead className="bg-gray-800 text-white">
-        <tr>
-          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Descripcion
-          </th>
-          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Diametro [pulg]
-          </th>
-          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Unidades
-          </th>
-          <th className="text-left py-3 px-4 uppercase font-semibold text-sm">
-            Material
-          </th>
-          <th className="text-left py-3 px-4 uppercase font-semibold text-sm">
-            Serie
-          </th>
-        </tr>
-      </thead>
-      <tbody className="text-gray-700">
+    <Table>
+      <Thead>
+        <Tr>
+          <Th>Descripcion</Th>
+          <Th>Diametro [pulg]</Th>
+          <Th>Unidades</Th>
+          <Th>Material</Th>
+          <Th>Serie</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
         {materiales.map((material, idx) => (
           <TableRow key={idx} {...material} />
         ))}
-      </tbody>
-    </table>
+      </Tbody>
+    </Table>
   );
 }
 
 function EstructTable({ materiales }) {
   return (
-    <table className="min-w-full bg-white">
-      <thead className="bg-gray-800 text-white">
-        <tr>
-          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Tipo de perfil
-          </th>
-          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Cantidad [metros]
-          </th>
-          <th className="text-left py-3 px-4 uppercase font-semibold text-sm">
-            Material
-          </th>
-          <th className="text-left py-3 px-4 uppercase font-semibold text-sm">
-            Serie
-          </th>
-        </tr>
-      </thead>
-      <tbody className="text-gray-700">
+    <Table>
+      <Thead>
+        <Tr>
+          <Th>Tipo de perfil</Th>
+          <Th>Cantidad [metros]</Th>
+          <Th>Material</Th>
+          <Th>Serie</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
         {materiales.map((material, idx) => (
           <TableRow key={idx} {...material} />
         ))}
-      </tbody>
-    </table>
+      </Tbody>
+    </Table>
   );
 }
 
 export default function InventarioObra({ obra, piping, estructural, welding }) {
   return (
     <div>
-      {obra && (
-        <h1 className="sticky top-0 text-xl pb-3 flex items-center">{obra.nombre}</h1>
-      )}
+      {obra && <h1>{obra.nombre}</h1>}
       {piping.length > 0 && (
-        <div className="w-full mt-12">
-          <p className="text-l pb-3 flex items-center">
-            <i className="fas fa-list mr-3"></i>Piping
+        <div>
+          <p>
+            <i></i>Piping
           </p>
-          <div className="bg-white overflow-auto">
+          <div>
             <PipingTable materiales={piping} />
           </div>
         </div>
       )}
 
       {welding.length > 0 && (
-        <div className="w-full mt-12">
-          <p className="text-l pb-3 flex items-center">
-            <i className="fas fa-list mr-3"></i>Welding
+        <div>
+          <p>
+            <i></i>Welding
           </p>
-          <div className="bg-white overflow-auto">
+          <div>
             <WeldingTable materiales={welding} />
           </div>
         </div>
       )}
       {estructural.length > 0 && (
-        <div className="w-full mt-12">
-          <p className="text-l pb-3 flex items-center">
-            <i className="fas fa-list mr-3"></i>Perfiles Estructurales
+        <div>
+          <p>
+            <i></i>Perfiles Estructurales
           </p>
-          <div className="bg-white overflow-auto">
+          <div>
             <EstructTable materiales={estructural} />
           </div>
         </div>

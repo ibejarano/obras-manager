@@ -19,7 +19,13 @@ function TableRow({ id, nombre, ubicacion, cliente, inicio, fin }) {
   );
 }
 
-function TableObra({ obras }) {
+export default function ObrasTable() {
+  const { loading, error, data } = useQuery(GET_OBRAS);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
+
+  const { obras } = data;
+
   return (
     <Table variant="striped" colorScheme="twitter">
       <Thead>
@@ -37,30 +43,5 @@ function TableObra({ obras }) {
         ))}
       </Tbody>
     </Table>
-  );
-}
-
-export default function ObrasTable() {
-  const { loading, error, data } = useQuery(GET_OBRAS);
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :(</p>;
-
-  const { obras } = data;
-  return (
-    <div>
-      <div className="w-full overflow-x-hidden border-t flex flex-col">
-        <main className="w-full flex-grow p-6">
-          <h1 className="text-3xl text-black pb-6">Obras</h1>
-          <div className="w-full mt-12">
-            <p className="text-xl pb-3 flex items-center">
-              <i className="fas fa-list mr-3"></i> Activas
-            </p>
-            <div className="bg-white overflow-auto">
-              <TableObra obras={obras} />
-            </div>
-          </div>
-        </main>
-      </div>
-    </div>
   );
 }

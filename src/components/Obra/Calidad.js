@@ -5,51 +5,53 @@ import UploadCalidad from "./UploadCalidad";
 import Modal from "../common/Modal";
 import { GET_CALIDAD_WITH_ID } from "../../adapters/queries";
 
+import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
+
 function TableRow({ name, url, caption, created_at }) {
   const created = new Date(created_at);
   return (
-    <tr className="bg-gray-200">
-      <td className="w-1/3 text-left py-3 px-4">{name}</td>
-      <td className="w-1/3 text-left py-3 px-4">
+    <Tr className="bg-gray-200">
+      <Td className="w-1/3 text-left py-3 px-4">{name}</Td>
+      <Td className="w-1/3 text-left py-3 px-4">
         {caption || "Sin Descripcion"}
-      </td>
-      <td className="w-1/3 text-left py-3 px-4">
+      </Td>
+      <Td className="w-1/3 text-left py-3 px-4">
         {created.toLocaleDateString("es-AR")}
-      </td>
-      <td className="w-1/3 text-left py-3 px-4">
+      </Td>
+      <Td className="w-1/3 text-left py-3 px-4">
         <a target="_blank" href={"http://localhost:1337" + url}>
           GET
         </a>
-      </td>
-    </tr>
-  );  
+      </Td>
+    </Tr>
+  );
 }
 
 function Tabla({ data }) {
   return (
-    <table className="min-w-full bg-white">
-      <thead className="bg-gray-800 text-white">
-        <tr>
-          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+    <Table className="min-w-full bg-white">
+      <Thead className="bg-gray-800 text-white">
+        <Tr>
+          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
             Nombre
-          </th>
-          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+          </Th>
+          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
             Descripcion
-          </th>
-          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+          </Th>
+          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
             Fecha de carga
-          </th>
-          <th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+          </Th>
+          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
             Descargar
-          </th>
-        </tr>
-      </thead>
-      <tbody className="text-gray-700">
+          </Th>
+        </Tr>
+      </Thead>
+      <Tbody className="text-gray-700">
         {data.map((row) => (
           <TableRow {...row} key={row.url} />
         ))}
-      </tbody>
-    </table>
+      </Tbody>
+    </Table>
   );
 }
 
