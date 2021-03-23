@@ -1,11 +1,29 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import UploadCalidad from "./UploadCalidad";
-import Modal from "../common/Modal";
 import { GET_CALIDAD_WITH_ID } from "../../adapters/queries";
 
-import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  Button,
+  useDisclosure,
+  Text,
+  HStack,
+} from "@chakra-ui/react";
+
+import { ArrowBackIcon, AddIcon } from "@chakra-ui/icons";
 
 function TableRow({ name, url, caption, created_at }) {
   const created = new Date(created_at);
@@ -57,6 +75,9 @@ function Tabla({ data }) {
 
 export default function Calidad() {
   const { id } = useParams();
+  const history = useHistory();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef();
   const { loading, error, data, refetch } = useQuery(GET_CALIDAD_WITH_ID, {
     variables: {
       idObra: id,
@@ -74,12 +95,47 @@ export default function Calidad() {
 
   return (
     <React.Fragment>
+      <Button
+        mx={4}
+        onClick={() => history.goBack()}
+        leftIcon={<ArrowBackIcon />}
+      >
+        Volver
+      </Button>
+      <Button
+        ref={btnRef}
+        colorScheme="teal"
+        onClick={onOpen}
+        rightIcon={<AddIcon />}
+      >
+        Agregar archivos | 
+      </Button>
       <Tabla data={certificados} />
       <Tabla data={procedimientos} />
       <Tabla data={planillas} />
-      <Modal>
-        <UploadCalidad {...calidad} refetch={refetch} />
-      </Modal>
+      <Drawer
+        isOpen={isOpen}
+        placement="right"
+        onClose={onClose}
+        finalFocusRef={btnRef}
+      >
+        <DrawerOverlay>
+          <DrawerContent>
+            <DrawerHeader>Subir nuevos archivos</DrawerHeader>
+
+            <DrawerBody>
+              <UploadCalidad {...calidad} refetch={refetch} />
+            </DrawerBody>
+
+            <DrawerFooter>
+              <Button variant="outline" mr={3} onClick={onClose}>
+                Cancelar
+              </Button>
+              <Button color="blue">Guardar</Button>
+            </DrawerFooter>
+          </DrawerContent>
+        </DrawerOverlay>
+      </Drawer>
     </React.Fragment>
   );
 }
