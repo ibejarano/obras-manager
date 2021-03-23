@@ -1,19 +1,13 @@
 import "./App.css";
-import React, { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  useParams,
-} from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Layout from "./components/Layout";
 // import DummyContent from "./components/DummyContent";
-import ObrasTable from "./components/ObrasTable";
-import EventsTable from "./components/EventTable";
-import PeopleTable from "./components/PeopleTable";
-import Inventarios from "./components/Inventarios";
-import Obra from "./components/Obra";
+import Dashboard from "./pages/Dashboard";
+import EventsTable from "./components/Events";
+import Personal from "./pages/Personal";
+import Inventario from "./pages/Inventario";
 
 function App() {
   return (
@@ -21,13 +15,13 @@ function App() {
       <Layout>
         <Switch>
           <Route path="/personal">
-            <PeopleTable />
+            <Personal />
           </Route>
           <Route path="/inventarios">
-            <Inventarios />
+            <Inventario />
           </Route>
           <Route path="/">
-            <ObrasTable />
+            <Dashboard />
             {/* <EventsTable /> */}
           </Route>
         </Switch>
