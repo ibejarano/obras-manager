@@ -23,7 +23,8 @@ import {
   HStack,
 } from "@chakra-ui/react";
 
-import { ArrowBackIcon, AddIcon } from "@chakra-ui/icons";
+import GoBackButton from "../common/GoBackButton";
+import { AddIcon } from "@chakra-ui/icons";
 
 function TableRow({ name, url, caption, created_at }) {
   const created = new Date(created_at);
@@ -75,7 +76,6 @@ function Tabla({ data }) {
 
 export default function Calidad() {
   const { id } = useParams();
-  const history = useHistory();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
   const { loading, error, data, refetch } = useQuery(GET_CALIDAD_WITH_ID, {
@@ -96,19 +96,12 @@ export default function Calidad() {
   return (
     <React.Fragment>
       <Button
-        mx={4}
-        onClick={() => history.goBack()}
-        leftIcon={<ArrowBackIcon />}
-      >
-        Volver
-      </Button>
-      <Button
         ref={btnRef}
         colorScheme="teal"
         onClick={onOpen}
         rightIcon={<AddIcon />}
       >
-        Agregar archivos | 
+        Agregar archivos |
       </Button>
       <Tabla data={certificados} />
       <Tabla data={procedimientos} />

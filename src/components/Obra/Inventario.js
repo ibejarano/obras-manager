@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 
 import InventarioObra from "../Inventarios/InventarioObra";
 import UpdateInventario from "../Inventarios/UpdateInventario";
 import { GET_INVENTARIO_WITH_ID } from "../../adapters/queries";
+
+import { AddIcon } from "@chakra-ui/icons";
 
 import {
   Drawer,
@@ -37,8 +39,13 @@ export default function Inventario() {
 
   return (
     <React.Fragment>
-      <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
-        Open
+      <Button
+        ref={btnRef}
+        colorScheme="teal"
+        onClick={onOpen}
+        rightIcon={<AddIcon />}
+      >
+        Agregar items |
       </Button>
       <InventarioObra {...inventario} />
 

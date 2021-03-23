@@ -1,17 +1,10 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
-import {
-  Box,
-  Heading,
-  Text,
-  Flex,
-  Wrap,
-  WrapItem,
-  Badge,
-} from "@chakra-ui/react";
+import { Box, Heading, Text, Wrap, Badge, HStack } from "@chakra-ui/react";
 import { useParams, Link, Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
+import GoBackButton from "../common/GoBackButton";
 import Calidad from "./Calidad";
 import PeopleObra from "./People";
 import Planos from "./Planos";
@@ -41,6 +34,15 @@ function PageInfo({ title, url, description }) {
   );
 }
 
+function Wrapper({ children }) {
+  return (
+    <>
+      <GoBackButton />
+      {children}
+    </>
+  );
+}
+
 export default function Obra({ id }) {
   const { loading, error, data } = useQuery(GET_OBRAS_WITH_ID, {
     variables: {
@@ -54,22 +56,66 @@ export default function Obra({ id }) {
   const { obra } = data;
   return (
     <>
-      <Badge color="teal" p={3} borderRadius={24} m={4}>
-        Cliente | {obra.cliente}
-      </Badge>
-      <Badge color="teal" p={3} borderRadius={24} m={4}>
-        Ubicacion | {obra.ubicacion}
-      </Badge>
-      <Badge color="teal" p={3} borderRadius={24} m={4}>
-        Fecha de inicio | {obra.inicio}
-      </Badge>
+      <HStack my={4}>
+        <Badge color="teal" p={2} borderRadius={24}>
+          Cliente | {obra.cliente}
+        </Badge>
+        <Badge color="teal" p={2} borderRadius={24}>
+          Ubicacion | {obra.ubicacion}
+        </Badge>
+        <Badge color="teal" p={2} borderRadius={24}>
+          Fecha de inicio | {obra.inicio}
+        </Badge>
+      </HStack>
       <Switch>
-        <Route path="/:id/galeria/:idGaleria" children={<ShowGallery />} />
-        <Route path="/:id/galeria" children={<Gallery />} />
-        <Route path="/:id/personal" children={<PeopleObra />} />
-        <Route path="/:id/inventario" children={<Inventario />} />
-        <Route path="/:id/calidad" children={<Calidad />} />
-        <Route path="/:id/planos" children={<Planos />} />
+        <Route
+          path="/:id/galeria/:idGaleria"
+          children={
+            <Wrapper>
+              <ShowGallery />
+            </Wrapper>
+          }
+        />
+        <Route
+          path="/:id/galeria"
+          children={
+            <Wrapper>
+              <Gallery />
+            </Wrapper>
+          }
+        />
+        <Route
+          path="/:id/personal"
+          children={
+            <Wrapper>
+              <PeopleObra />
+            </Wrapper>
+          }
+        />
+        <Route
+          path="/:id/inventario"
+          children={
+            <Wrapper>
+              <Inventario />
+            </Wrapper>
+          }
+        />
+        <Route
+          path="/:id/calidad"
+          children={
+            <Wrapper>
+              <Calidad />
+            </Wrapper>
+          }
+        />
+        <Route
+          path="/:id/planos"
+          children={
+            <Wrapper>
+              <Planos />
+            </Wrapper>
+          }
+        />
         <Route path="/:id">
           <Wrap spacing="30px">
             <PageInfo

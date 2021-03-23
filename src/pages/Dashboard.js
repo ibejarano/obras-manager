@@ -2,7 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import Obra from "../components/Obra";
-import { Heading, Select } from "@chakra-ui/react";
+import { Heading, HStack, Select } from "@chakra-ui/react";
 import { GET_OBRAS } from "../adapters/queries";
 
 export default function ObrasTable() {
@@ -22,12 +22,14 @@ export default function ObrasTable() {
 
   return (
     <>
-      <Heading fontSize="lg">Obra:</Heading>
-      <Select onChange={handleSelect} placeholder="Seleccione una obra">
-        {obras.map((obra) => (
-          <option value={obra.id}>{obra.nombre}</option>
-        ))}
-      </Select>
+      <HStack>
+        <Heading fontSize="lg">Obra:</Heading>
+        <Select onChange={handleSelect} placeholder="Seleccione una obra">
+          {obras.map((obra) => (
+            <option value={obra.id}>{obra.nombre}</option>
+          ))}
+        </Select>
+      </HStack>
       {obraId && <Obra id={obraId} />}
     </>
   );
