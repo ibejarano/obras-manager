@@ -7,11 +7,7 @@ import { Button } from "@chakra-ui/react";
 export default function GoBackButton() {
   const history = useHistory();
   return (
-    <Button
-      mx={4}
-      onClick={() => history.goBack()}
-      leftIcon={<ArrowBackIcon />}
-    >
+    <Button onClick={() => history.goBack()} leftIcon={<ArrowBackIcon />}>
       Volver
     </Button>
   );
