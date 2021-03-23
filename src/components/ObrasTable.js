@@ -1,8 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-
-import { Table, Thead, Tbody, Tr, Th, Td, Heading } from "@chakra-ui/react";
+import Obra from "./Obra";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Heading,
+  Select,
+  Stack,
+} from "@chakra-ui/react";
 import { GET_OBRAS } from "../adapters/queries";
 
 function TableRow({ id, nombre, ubicacion, cliente, inicio, fin }) {
@@ -21,30 +31,28 @@ function TableRow({ id, nombre, ubicacion, cliente, inicio, fin }) {
 
 export default function ObrasTable() {
   const { loading, error, data } = useQuery(GET_OBRAS);
+  const [obraId, setObraId] = React.useState("");
+  const history = useHistory();
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
   const { obras } = data;
 
+  const handleSelect = (e) => {
+    setObraId(e.target.value);
+    history.push(`/${e.target.value}`);
+  };
+
   return (
     <>
-      <Heading>Obras Activas</Heading>
-      <Table variant="striped" colorScheme="teal">
-        <Thead>
-          <Tr>
-            <Th>Nombre</Th>
-            <Th>Cliente</Th>
-            <Th>Ubicacion</Th>
-            <Th>Inicio</Th>
-            <Th>Fin</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {obras.map((obra) => (
-            <TableRow {...obra} key={obra.nombre} />
-          ))}
-        </Tbody>
-      </Table>
+      <Heading fontSize="md">Obra:</Heading>
+      <Select onChange={handleSelect} placeholder="Seleccione una obra">
+        {obras.map((obra) => (
+          <option value={obra.id}>{obra.nombre}</option>
+        ))}
+      </Select>
+      {obraId && <Obra id={obraId} />}
     </>
   );
 }

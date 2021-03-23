@@ -26,9 +26,6 @@ function App() {
           <Route path="/inventarios">
             <Inventarios />
           </Route>
-          <Route path="/:id">
-            <Obra />
-          </Route>
           <Route path="/">
             <ObrasTable />
             {/* <EventsTable /> */}
