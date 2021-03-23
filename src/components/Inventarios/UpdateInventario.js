@@ -6,6 +6,17 @@ import {
   CREATE_WELDING_ENTRY,
 } from "../../adapters/mutations";
 
+import {
+  FormControl,
+  FormLabel,
+  Input,
+  Button,
+  Radio,
+  RadioGroup,
+  Stack,
+  Select,
+} from "@chakra-ui/react";
+
 const TIPOS_PERFIL = ["L", "U", "T", "dobleT"];
 const AVAILABLE_DIAMETERS = [
   "1",
@@ -30,61 +41,19 @@ function SelectField({ newItem, handleChange }) {
   const field = mat_type == "estructural" ? "tipo_perfil" : "diametro_pulg";
 
   return (
-    <div className="col-span-6 sm:col-span-6 lg:col-span-6">
-      <label
-        htmlFor={field}
-        className="block text-sm font-medium text-gray-700"
-      >
-        {labelText}
-      </label>
-      <select
+    <FormControl id={field}>
+      <FormLabel>{labelText}</FormLabel>
+      <Select
+        placeholder="Seleccione uno"
         name={field}
-        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         onChange={handleChange}
         value={newItem[field]}
       >
-        <option disabled value="disabled">
-          -Seleccione uno-
-        </option>
         {optionsList.map((d) => (
           <option key={d}>{d}</option>
         ))}
-      </select>
-    </div>
-  );
-}
-
-function RadioButtons({ selected, handleCheck }) {
-  return (
-    <div className="col-span-6 sm:col-span-6 lg:col-span-6">
-      <input
-        type="radio"
-        id="piping"
-        name="mat_type"
-        value="piping"
-        checked={"piping" == selected}
-        onChange={handleCheck}
-      />
-      <label htmlFor="mat_type">Piping</label>
-      <input
-        type="radio"
-        id="welding"
-        name="mat_type"
-        value="welding"
-        onChange={handleCheck}
-        checked={"welding" == selected}
-      />
-      <label htmlFor="mat_type">Welding</label>
-      <input
-        type="radio"
-        id="estructural"
-        name="mat_type"
-        value="estructural"
-        onChange={handleCheck}
-        checked={"estructural" == selected}
-      />
-      <label htmlFor="mat_type">Estructural</label>
-    </div>
+      </Select>
+    </FormControl>
   );
 }
 
@@ -150,59 +119,58 @@ export default function AddPipingMaterial({ idInventario, refetch }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <div>
-          <RadioButtons
-            handleCheck={handleChange}
-            selected={newItem.mat_type}
-          />
-          <div>
-            <label htmlFor="cantidad">Descripcion (Solo para welding)</label>
-            <input
-              type="text"
-              onChange={handleChange}
-              name="descripcion"
-              value={newItem.descripcion}
-              disabled={newItem.mat_type != "welding"}
-            />
-          </div>
-          <SelectField newItem={newItem} handleChange={handleChange} />
-          <div className="col-span-6 sm:col-span-3 lg:col-span-6">
-            <label htmlFor="cantidad">Cantidad (metros o unidades)</label>
-            <input
-              type="number"
-              onChange={handleChange}
-              name="cantidad"
-              value={newItem.cantidad}
-            />
-          </div>
+      <RadioGroup
+        onChange={(v) => setNewItem((prev) => ({ ...prev, mat_type: v }))}
+        value={newItem.mat_type}
+      >
+        <Stack direction="row">
+          <Radio value="piping">Piping</Radio>
+          <Radio value="welding">Welding</Radio>
+          <Radio value="estructural">Estructural</Radio>
+        </Stack>
+      </RadioGroup>
+      <FormControl id="descripcion">
+        <FormLabel>Descripcion (Solo para welding)</FormLabel>
+        <Input
+          type="text"
+          onChange={handleChange}
+          name="descripcion"
+          value={newItem.descripcion}
+          disabled={newItem.mat_type != "welding"}
+        />
+      </FormControl>
+      <SelectField newItem={newItem} handleChange={handleChange} />
+      <FormControl id="cantidad">
+        <FormLabel htmlFor="cantidad">Cantidad (metros o unidades)</FormLabel>
+        <Input
+          type="number"
+          onChange={handleChange}
+          name="cantidad"
+          value={newItem.cantidad}
+        />
+      </FormControl>
 
-          <div className="col-span-6 sm:col-span-3 lg:col-span-6">
-            <label htmlFor="material">Material</label>
-            <input
-              type="text"
-              onChange={handleChange}
-              name="material"
-              value={newItem.material}
-            />
-          </div>
+      <FormControl id="material">
+        <FormLabel htmlFor="material">Material</FormLabel>
+        <Input
+          type="text"
+          onChange={handleChange}
+          name="material"
+          value={newItem.material}
+        />
+      </FormControl>
 
-          <div>
-            <label htmlFor="num_serie">Numero de serie / Lote</label>
+      <FormControl id="num_serie">
+        <FormLabel htmlFor="num_serie">Numero de serie / Lote</FormLabel>
+        <Input
+          type="text"
+          onChange={handleChange}
+          name="num_serie"
+          value={newItem.num_serie}
+        />
+      </FormControl>
 
-            <input
-              type="text"
-              onChange={handleChange}
-              name="num_serie"
-              value={newItem.num_serie}
-            />
-          </div>
-
-          <div>
-            <button type="submit">Actualizar</button>
-          </div>
-        </div>
-      </div>
+      <Button type="submit">Actualizar</Button>
     </form>
   );
 }
