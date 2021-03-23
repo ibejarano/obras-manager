@@ -18,6 +18,8 @@ const GET_OBRAS_WITH_ID = gql`
     obra(id: $idObra) {
       nombre
       cliente
+      ubicacion
+      inicio
     }
   }
 `;

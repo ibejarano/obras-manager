@@ -46,7 +46,7 @@ export default function ObrasTable() {
 
   return (
     <>
-      <Heading fontSize="md">Obra:</Heading>
+      <Heading fontSize="lg">Obra:</Heading>
       <Select onChange={handleSelect} placeholder="Seleccione una obra">
         {obras.map((obra) => (
           <option value={obra.id}>{obra.nombre}</option>

@@ -1,6 +1,14 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
-import { Box, Heading, Text, Flex, Wrap, WrapItem } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Text,
+  Flex,
+  Wrap,
+  WrapItem,
+  Badge,
+} from "@chakra-ui/react";
 import { useParams, Link, Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
@@ -39,13 +47,22 @@ export default function Obra({ id }) {
       idObra: id,
     },
   });
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
   const { obra } = data;
-
   return (
     <>
+      <Badge color="teal" p={3} borderRadius={24} m={4}>
+        Cliente | {obra.cliente}
+      </Badge>
+      <Badge color="teal" p={3} borderRadius={24} m={4}>
+        Ubicacion | {obra.ubicacion}
+      </Badge>
+      <Badge color="teal" p={3} borderRadius={24} m={4}>
+        Fecha de inicio | {obra.inicio}
+      </Badge>
       <Switch>
         <Route path="/:id/galeria/:idGaleria" children={<ShowGallery />} />
         <Route path="/:id/galeria" children={<Gallery />} />
