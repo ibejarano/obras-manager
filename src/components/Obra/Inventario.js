@@ -6,6 +6,18 @@ import InventarioObra from "../Inventarios/InventarioObra";
 import UpdateInventario from "../Inventarios/UpdateInventario";
 import { GET_INVENTARIO_WITH_ID } from "../../adapters/queries";
 
+import {
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  useDisclosure,
+  Button,
+} from "@chakra-ui/react";
+
 export default function Inventario() {
   const { id } = useParams();
   const { loading, error, data, refetch } = useQuery(GET_INVENTARIO_WITH_ID, {
@@ -13,7 +25,9 @@ export default function Inventario() {
       idObra: id,
     },
   });
-  const [openAddInv, setOpenAddInv] = useState(false);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef();
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
@@ -23,15 +37,38 @@ export default function Inventario() {
 
   return (
     <React.Fragment>
-      <button onClick={() => setOpenAddInv(true)}>Agregar material</button>
+      <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
+        Open
+      </Button>
       <InventarioObra {...inventario} />
-      {openAddInv && (
-        <UpdateInventario
-          setOpen={setOpenAddInv}
-          idInventario={inventario.id}
-          refetch={refetch}
-        />
-      )}
+
+      <Drawer
+        isOpen={isOpen}
+        placement="right"
+        onClose={onClose}
+        finalFocusRef={btnRef}
+      >
+        <DrawerOverlay>
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader>Actualizar inventario</DrawerHeader>
+
+            <DrawerBody>
+              <UpdateInventario
+                idInventario={inventario.id}
+                refetch={refetch}
+              />
+            </DrawerBody>
+
+            <DrawerFooter>
+              <Button variant="outline" mr={3} onClick={onClose}>
+                Cancel
+              </Button>
+              <Button color="blue">Save</Button>
+            </DrawerFooter>
+          </DrawerContent>
+        </DrawerOverlay>
+      </Drawer>
     </React.Fragment>
   );
 }
