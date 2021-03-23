@@ -1,5 +1,6 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
+import { Box, Heading, Text, Flex, Wrap, WrapItem } from "@chakra-ui/react";
 import { useParams, Link, Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
@@ -14,16 +15,21 @@ import { GET_OBRAS_WITH_ID } from "../../adapters/queries";
 
 function PageInfo({ title, url, description }) {
   return (
-    <Link to={url}>
-      <div className="flex-initial bg-white shadow overflow-hidden sm:rounded-lg m-2">
-        <div className="px-4 py-5 sm:px-6">
-          <h3 className="text-lg leading-6 font-medium text-gray-900">
-            {title}
-          </h3>
-          <p className="mt-1 max-w-2xl text-sm text-gray-500">{description}</p>
-        </div>
-      </div>
-    </Link>
+    <Box
+      minW="md"
+      p={4}
+      borderWidth="1px"
+      borderRadius="lg"
+      borderColor="teal"
+      overflow="hidden"
+    >
+      <Link to={url}>
+        <Heading fontSize="xl" my={2}>
+          {title}
+        </Heading>
+        <Text fontSize="md">{description}</Text>
+      </Link>
+    </Box>
   );
 }
 
@@ -54,7 +60,7 @@ export default function Obra() {
           <Route path="/:id/calidad" children={<Calidad />} />
           <Route path="/:id/planos" children={<Planos />} />
           <Route path="/:id">
-            <div className="flex flex-wrap">
+            <Wrap spacing="30px" >
               <PageInfo
                 title="Personal"
                 description="Personal activo en obra e impresion de partes diarios"
@@ -72,7 +78,7 @@ export default function Obra() {
               />
               <PageInfo
                 title="Calidad"
-                description="Ceriticados de instrumentos, planillas y procedimientos"
+                description="Certificados de instrumentos, planillas y procedimientos"
                 url={`${id}/calidad`}
               />
               <PageInfo
@@ -80,7 +86,7 @@ export default function Obra() {
                 description="Fotos de fases de la obra"
                 url={`${id}/galeria`}
               />
-            </div>
+            </Wrap>
           </Route>
         </Switch>
         <ToastContainer />

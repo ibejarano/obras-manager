@@ -1,34 +1,6 @@
 import React from "react";
-import {
-  Grid,
-  GridItem,
-  Avatar,
-  Menu,
-  MenuList,
-  MenuButton,
-  MenuItem,
-} from "@chakra-ui/react";
+import { Grid, GridItem } from "@chakra-ui/react";
 import SideBar from "./sidebar";
-
-function UserIcon() {
-  return (
-    <Menu>
-      <MenuButton>
-        <Avatar
-          size="xl"
-          name="Ignacio Bejarano"
-          src="https://source.unsplash.com/uJ8LNVCBjFQ/400x400"
-          loading="lazy"
-        />
-      </MenuButton>
-      <MenuList>
-        <MenuItem>Cuenta</MenuItem>
-        <MenuItem>Soporte</MenuItem>
-        <MenuItem>Salir</MenuItem>
-      </MenuList>
-    </Menu>
-  );
-}
 
 export default function Layout({ children }) {
   return (
@@ -44,7 +16,7 @@ export default function Layout({ children }) {
       <GridItem rowSpan={1} colSpan={1}>
         <SideBar />
       </GridItem>
-      <GridItem colSpan={1} bg="white" borderRadius={10} >
+      <GridItem colSpan={1} bg="white" borderRadius={10} p={8}>
         {children}
       </GridItem>
     </Grid>

@@ -16,11 +16,9 @@ import Inventarios from "./components/Inventarios";
 import Obra from "./components/Obra";
 
 function App() {
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
     <Router>
-      <Layout isOpen={isOpen} setIsOpen={setIsOpen}>
+      <Layout>
         <Switch>
           <Route path="/personal">
             <PeopleTable />

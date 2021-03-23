@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 
-import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, Td, Heading } from "@chakra-ui/react";
 import { GET_OBRAS } from "../adapters/queries";
 
 function TableRow({ id, nombre, ubicacion, cliente, inicio, fin }) {
@@ -27,21 +27,24 @@ export default function ObrasTable() {
   const { obras } = data;
 
   return (
-    <Table variant="striped" colorScheme="twitter">
-      <Thead>
-        <Tr>
-          <Th>Nombre</Th>
-          <Th>Cliente</Th>
-          <Th>Ubicacion</Th>
-          <Th>Inicio</Th>
-          <Th>Fin</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {obras.map((obra) => (
-          <TableRow {...obra} key={obra.nombre} />
-        ))}
-      </Tbody>
-    </Table>
+    <>
+      <Heading>Obras Activas</Heading>
+      <Table variant="striped" colorScheme="teal">
+        <Thead>
+          <Tr>
+            <Th>Nombre</Th>
+            <Th>Cliente</Th>
+            <Th>Ubicacion</Th>
+            <Th>Inicio</Th>
+            <Th>Fin</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {obras.map((obra) => (
+            <TableRow {...obra} key={obra.nombre} />
+          ))}
+        </Tbody>
+      </Table>
+    </>
   );
 }
