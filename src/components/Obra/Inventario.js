@@ -44,6 +44,7 @@ export default function Inventario() {
         colorScheme="teal"
         onClick={onOpen}
         rightIcon={<AddIcon />}
+        mx={4}
       >
         Agregar items |
       </Button>

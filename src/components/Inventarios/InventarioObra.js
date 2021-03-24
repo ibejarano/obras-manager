@@ -1,6 +1,18 @@
 import React from "react";
 
-import { Table, Thead, Tbody, Td, Tr, Th } from "@chakra-ui/react";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Td,
+  Tr,
+  Th,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+} from "@chakra-ui/react";
 
 function TableRow({
   diametro_pulg,
@@ -23,7 +35,7 @@ function TableRow({
 
 function PipingTable({ materiales }) {
   return (
-    <Table>
+    <Table colorScheme="teal">
       <Thead>
         <Tr>
           <Th>Diametro [pulg]</Th>
@@ -43,7 +55,7 @@ function PipingTable({ materiales }) {
 
 function WeldingTable({ materiales }) {
   return (
-    <Table>
+    <Table colorScheme="teal">
       <Thead>
         <Tr>
           <Th>Descripcion</Th>
@@ -64,7 +76,7 @@ function WeldingTable({ materiales }) {
 
 function EstructTable({ materiales }) {
   return (
-    <Table>
+    <Table colorScheme="teal">
       <Thead>
         <Tr>
           <Th>Tipo de perfil</Th>
@@ -82,41 +94,26 @@ function EstructTable({ materiales }) {
   );
 }
 
-export default function InventarioObra({ obra, piping, estructural, welding }) {
+export default function InventarioObra({ piping, estructural, welding }) {
+  console.log(piping);
   return (
-    <div>
-      {obra && <h1>{obra.nombre}</h1>}
-      {piping.length > 0 && (
-        <div>
-          <p>
-            <i></i>Piping
-          </p>
-          <div>
-            <PipingTable materiales={piping} />
-          </div>
-        </div>
-      )}
-
-      {welding.length > 0 && (
-        <div>
-          <p>
-            <i></i>Welding
-          </p>
-          <div>
-            <WeldingTable materiales={welding} />
-          </div>
-        </div>
-      )}
-      {estructural.length > 0 && (
-        <div>
-          <p>
-            <i></i>Perfiles Estructurales
-          </p>
-          <div>
-            <EstructTable materiales={estructural} />
-          </div>
-        </div>
-      )}
-    </div>
+    <Tabs variant="enclosed-colored" my={4}>
+      <TabList>
+        <Tab>Piping</Tab>
+        <Tab>Welding</Tab>
+        <Tab>Estructural</Tab>
+      </TabList>
+      <TabPanels>
+        <TabPanel>
+          <PipingTable materiales={piping} />
+        </TabPanel>
+        <TabPanel>
+          <WeldingTable materiales={welding} />
+        </TabPanel>
+        <TabPanel>
+          <EstructTable materiales={estructural} />
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
   );
 }
