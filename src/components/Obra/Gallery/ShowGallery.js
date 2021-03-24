@@ -2,6 +2,8 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { gql, useQuery } from "@apollo/client";
 
+import { Heading, Image, Flex } from "@chakra-ui/react";
+
 const GET_IMAGES_FILES = gql`
   query($id: ID!) {
     imagene(id: $id) {
@@ -28,17 +30,18 @@ export default function Gallery() {
   const { imagene } = data;
 
   return (
-    <div>
-      <h1>{imagene.descripcion}</h1>
-      <div className="flex flex-row flex-wrap justify-center">
+    <>
+      <Heading my={4}>{imagene.descripcion}</Heading>
+      <Flex gridGap={4}>
         {imagene.archivos.map(({ url }) => (
-          <img
-            className="w-1/4 object-contain m-2"
+          <Image
             key={url}
+            boxSize="200px"
+            objectFit="cover"
             src={`http://localhost:1337${url}`}
           />
         ))}
-      </div>
-    </div>
+      </Flex>
+    </>
   );
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import UploadCalidad from "./UploadCalidad";
 import { GET_CALIDAD_WITH_ID } from "../../adapters/queries";
@@ -19,12 +19,14 @@ import {
   DrawerContent,
   Button,
   useDisclosure,
-  Text,
-  HStack,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
 } from "@chakra-ui/react";
 
-import GoBackButton from "../common/GoBackButton";
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, DownloadIcon } from "@chakra-ui/icons";
 
 function TableRow({ name, url, caption, created_at }) {
   const created = new Date(created_at);
@@ -39,7 +41,7 @@ function TableRow({ name, url, caption, created_at }) {
       </Td>
       <Td className="w-1/3 text-left py-3 px-4">
         <a target="_blank" href={"http://localhost:1337" + url}>
-          GET
+          <DownloadIcon />
         </a>
       </Td>
     </Tr>
@@ -100,12 +102,29 @@ export default function Calidad() {
         colorScheme="teal"
         onClick={onOpen}
         rightIcon={<AddIcon />}
+        mx={4}
       >
         Agregar archivos |
       </Button>
-      <Tabla data={certificados} />
-      <Tabla data={procedimientos} />
-      <Tabla data={planillas} />
+      <Tabs my={4}>
+        <TabList>
+          <Tab>Certificados</Tab>
+          <Tab>Procedimientos</Tab>
+          <Tab>Planillas</Tab>
+        </TabList>
+
+        <TabPanels>
+          <TabPanel>
+            <Tabla data={certificados} />
+          </TabPanel>
+          <TabPanel>
+            <Tabla data={procedimientos} />
+          </TabPanel>
+          <TabPanel>
+            <Tabla data={planillas} />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
       <Drawer
         isOpen={isOpen}
         placement="right"

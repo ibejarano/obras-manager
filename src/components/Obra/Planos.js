@@ -2,27 +2,59 @@ import React from "react";
 import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 
-import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  useDisclosure,
+  Button,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+} from "@chakra-ui/react";
+import { AddIcon, DownloadIcon } from "@chakra-ui/icons";
 import UploadPlanos from "./UploadPlanos";
-import Modal from "../common/Modal";
+import DrawerPane from "../common/DrawerPane";
 import { GET_PLANOS_WITH_ID } from "../../adapters/queries";
 
-function TableRow({ name, url, tipo }) {
+function TablePlano({ data }) {
   return (
-    <Tr className="bg-gray-200">
-      <Td className="w-1/3 text-left py-3 px-4">{name}</Td>
-      <Td className="w-1/3 text-left py-3 px-4">{tipo}</Td>
-      <Td className="w-1/3 text-left py-3 px-4">
-        <a target="_blank" href={"http://localhost:1337" + url}>
-          GET
-        </a>
-      </Td>
-    </Tr>
+    <Table className="min-w-full bg-white">
+      <Thead className="bg-gray-800 text-white">
+        <Tr>
+          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+            Nombre del plano
+          </Th>
+          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+            Descargar
+          </Th>
+        </Tr>
+      </Thead>
+      <Tbody className="text-gray-700">
+        {data.map(({ name, url }) => (
+          <Tr>
+            <Td>{name}</Td>
+            <Td>
+              <a target="_blank" href={"http://localhost:1337" + url}>
+                <DownloadIcon />
+              </a>
+            </Td>
+          </Tr>
+        ))}
+      </Tbody>
+    </Table>
   );
 }
 
 export default function Planos() {
   const { id } = useParams();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef();
   const { loading, error, data, refetch } = useQuery(GET_PLANOS_WITH_ID, {
     variables: {
       idObra: id,
@@ -40,35 +72,42 @@ export default function Planos() {
 
   return (
     <React.Fragment>
-      <Table className="min-w-full bg-white">
-        <Thead className="bg-gray-800 text-white">
-          <Tr>
-            <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-              Nombre del plano
-            </Th>
-            <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-              Tipo de plano
-            </Th>
-            <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-              Descargar
-            </Th>
-          </Tr>
-        </Thead>
-        <Tbody className="text-gray-700">
-          {civiles.map((plano) => (
-            <TableRow {...plano} key={plano.id} tipo="Civil" />
-          ))}
-          {mecanicos.map((plano) => (
-            <TableRow {...plano} key={plano.id} tipo="Mecanico" />
-          ))}
-          {piping.map((plano) => (
-            <TableRow {...plano} key={plano.id} tipo="Piping" />
-          ))}
-        </Tbody>
-      </Table>
-      <Modal>
+      <Button
+        ref={btnRef}
+        colorScheme="teal"
+        onClick={onOpen}
+        rightIcon={<AddIcon />}
+        mx={4}
+      >
+        Agregar archivos |
+      </Button>
+      <Tabs my={4}>
+        <TabList>
+          <Tab>Piping</Tab>
+          <Tab>Mecanico</Tab>
+          <Tab>Civil</Tab>
+        </TabList>
+
+        <TabPanels>
+          <TabPanel>
+            <TablePlano data={piping} tipo="Civil" />
+          </TabPanel>
+          <TabPanel>
+            <TablePlano data={civiles} tipo="Mecanico" />
+          </TabPanel>
+          <TabPanel>
+            <TablePlano data={mecanicos} tipo="Piping" />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+      <DrawerPane
+        headerText="Subir Planos"
+        onClose={onClose}
+        isOpen={isOpen}
+        btnRef={btnRef}
+      >
         <UploadPlanos plano={plano} refetch={refetch} />
-      </Modal>
+      </DrawerPane>
     </React.Fragment>
   );
 }
