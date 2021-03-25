@@ -4,13 +4,11 @@ import { Link } from "react-router-dom";
 import {
   Text,
   VStack,
-  HStack,
   Divider,
   Heading,
   Flex,
   Avatar,
   Box,
-  Badge,
 } from "@chakra-ui/react";
 
 import {
@@ -23,7 +21,7 @@ import {
 const sections = [
   { name: "Dashboard", slug: "/", icon: <HamburgerIcon color="white" /> },
   {
-    name: "Personal Obra",
+    name: "Personal",
     slug: "/personal",
     icon: <CalendarIcon color="white" />,
   },
@@ -46,11 +44,7 @@ function SectionLink({ name, slug }) {
 function UserAvatar() {
   return (
     <Flex color="white">
-      <Avatar
-        name="Ignacio Bejarano"
-        loading="lazy"
-        // src="https://bit.ly/sage-adebayo"
-      />
+      <Avatar name="Ignacio Bejarano" loading="lazy" />
       <Box ml="3">
         <Text fontWeight="bold">Ignacio Sebastian Bejarano</Text>
         <Text fontSize="sm">Administrador</Text>
