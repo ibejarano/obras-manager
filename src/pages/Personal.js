@@ -12,7 +12,7 @@ import {
 
 import { GET_PERSONAS } from "../adapters/queries";
 
-function PersonCard({ id, nombre, apellido, cargo }) {
+function PersonCard({ nombre, apellido, cargo }) {
   return (
     <Flex>
       <Box ml="3" borderWidth={2} p={4}>
