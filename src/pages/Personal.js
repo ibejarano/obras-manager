@@ -12,7 +12,7 @@ import {
 
 import { GET_PERSONAS } from "../adapters/queries";
 
-function PersonCard({ nombre, apellido, cargo }) {
+function PersonCard({ nombre, apellido, cargo, obra }) {
   return (
     <Flex>
       <Box ml="3" borderWidth={2} p={4}>
@@ -20,6 +20,9 @@ function PersonCard({ nombre, apellido, cargo }) {
           {nombre} {apellido}
         </Text>
         <Text fontSize="sm">{cargo}</Text>
+        <Text fontWeight="bold" fontSize="sm">
+          {obra ? `Obra: ${obra.nombre}` : "Sin obra"}
+        </Text>
       </Box>
     </Flex>
   );
