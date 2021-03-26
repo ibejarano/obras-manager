@@ -14,6 +14,15 @@ import {
   TabPanel,
 } from "@chakra-ui/react";
 
+function searchField(item, fields, term) {
+  for (let field of fields) {
+    if (item[field].search(term) >= 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function TableRow({
   diametro_pulg,
   cantidad,
@@ -21,6 +30,7 @@ function TableRow({
   material,
   tipo_perfil,
   descripcion,
+  obra,
 }) {
   return (
     <Tr>
@@ -29,6 +39,7 @@ function TableRow({
       <Td>{cantidad}</Td>
       <Td>{material || "-"}</Td>
       <Td>{num_serie || "-"}</Td>
+      {obra && <Td>{obra.nombre}</Td>}
     </Tr>
   );
 }
@@ -48,6 +59,33 @@ function PipingTable({ materiales }) {
         {materiales.map((material, idx) => (
           <TableRow key={idx} {...material} />
         ))}
+      </Tbody>
+    </Table>
+  );
+}
+
+function PipingTables({ inventarios, text }) {
+  const SEARCH_FIELDS = ["material", "num_serie"];
+
+  return (
+    <Table colorScheme="teal">
+      <Thead>
+        <Tr>
+          <Th>Diametro [pulg]</Th>
+          <Th>Cantidad [metros]</Th>
+          <Th>Material</Th>
+          <Th>Serie</Th>
+          <Th>Obra</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {inventarios.map(({ piping, obra }) =>
+          piping
+            .filter((item) => searchField(item, SEARCH_FIELDS, text))
+            .map((foundedItem, idx) => (
+              <TableRow key={idx} {...foundedItem} obra={obra} />
+            ))
+        )}
       </Tbody>
     </Table>
   );
@@ -94,6 +132,33 @@ function EstructTable({ materiales }) {
   );
 }
 
+function EstructTables({ inventarios, text }) {
+  const SEARCH_FIELDS = ["material", "tipo_perfil"];
+
+  return (
+    <Table colorScheme="teal">
+      <Thead>
+        <Tr>
+          <Th>Tipo de perfil</Th>
+          <Th>Cantidad [metros]</Th>
+          <Th>Material</Th>
+          <Th>Serie</Th>
+          <Th>Obra</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {inventarios.map(({ estructural, obra }) =>
+          estructural
+            .filter((item) => searchField(item, SEARCH_FIELDS, text))
+            .map((foundedItem, idx) => (
+              <TableRow key={idx} {...foundedItem} obra={obra} />
+            ))
+        )}
+      </Tbody>
+    </Table>
+  );
+}
+
 export default function InventarioObra({ piping, estructural, welding }) {
   console.log(piping);
   return (
@@ -117,3 +182,5 @@ export default function InventarioObra({ piping, estructural, welding }) {
     </Tabs>
   );
 }
+
+export { PipingTables, EstructTables };
