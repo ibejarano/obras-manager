@@ -20,33 +20,28 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
-export default function LoginPage({ setUser }) {
+export default function LoginPage({ setToken }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [identifier, setIdentifier] = useState("ibejarano@test.com");
-  const [password, setPassword] = useState("terere");
+  const [identifier, setIdentifier] = useState("");
+  const [password, setPassword] = useState("");
   const [login] = useMutation(LOGIN_MUTATION);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // I need to talk with server and send my identifyer and password
     const { data } = await login({
       variables: {
         user: identifier,
         pass: password,
       },
     });
-
-    // Setting my token....
+    setToken(data.login.jwt);
     window.localStorage.setItem("obras-token", data.login.jwt);
-    // alert(JSON.stringify({ identifier, password }));
-    // setUser(true);
-
     setIsSubmitting(false);
   };
 
   return (
-    <Center h="100vh" bg="teal.200">
+    <Center h="100vh" bg="teal.600">
       <Box
         bg="white"
         as="form"

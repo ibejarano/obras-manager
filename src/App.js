@@ -15,11 +15,16 @@ function App() {
     window.localStorage.getItem("obras-token")
   );
 
-  if (!token) return <LoginPage setUser={setToken} />;
+  useEffect(() => {
+    console.log("running Effect with token changed");
+    console.log(token)
+  }, [token]);
+
+  if (!token) return <LoginPage setToken={setToken} />;
 
   return (
     <Router>
-      <Layout token={token}>
+      <Layout token={token} setToken={setToken}>
         <Switch>
           <Route path="/personal">
             <Personal />
