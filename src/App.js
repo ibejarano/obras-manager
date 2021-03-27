@@ -17,14 +17,14 @@ function App() {
 
   useEffect(() => {
     console.log("running Effect with token changed");
-    console.log(token)
+    console.log(token);
   }, [token]);
 
   if (!token) return <LoginPage setToken={setToken} />;
 
   return (
     <Router>
-      <Layout token={token} setToken={setToken}>
+      <Layout setToken={setToken}>
         <Switch>
           <Route path="/personal">
             <Personal />

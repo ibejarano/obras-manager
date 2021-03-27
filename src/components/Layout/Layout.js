@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { Link as RouterLink } from "react-router-dom";
 import {
   Grid,
   GridItem,
@@ -15,22 +16,20 @@ import {
   MenuList,
   MenuItem,
   Button,
+  Link,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
 import { sections } from "./sidebar";
+import { ME } from "../../adapters/queries";
 
-function SectionLink({ name, slug }) {
-  return <Link to={slug}>{name}</Link>;
-}
-
-function UserAvatar({ name, email }) {
+function UserAvatar({ username, email }) {
   return (
     <Flex>
       <Avatar size="sm" name="Ignacio Bejarano" loading="lazy" />
       <Box ml="3">
         <Text fontWeight="bold" fontSize="sm">
-          {name}
+          {username}
         </Text>
         <Text fontStyle="italic" fontSize="xs">
           {email}
@@ -40,20 +39,18 @@ function UserAvatar({ name, email }) {
   );
 }
 
-export default function Layout({ children, token, setToken }) {
-  const [user, setUser] = useState({});
+export default function Layout({ children, setToken }) {
+  const { loading, error, data } = useQuery(ME);
 
   const logout = () => {
     window.localStorage.removeItem("obras-token");
     setToken(null);
   };
 
-  useEffect(() => {
-    if (token) {
-      // get user and set user
-      setUser({ name: "Ignacio Bejarano", email: "test@test.hardcode" });
-    }
-  }, [token]);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
+
+  const { me } = data;
 
   return (
     <Grid
@@ -74,7 +71,7 @@ export default function Layout({ children, token, setToken }) {
               rightIcon={<ChevronDownIcon />}
               p="4px"
             >
-              <UserAvatar {...user} />
+              <UserAvatar {...me} />
             </MenuButton>
             <MenuList>
               <MenuItem onClick={logout}>Salir</MenuItem>
@@ -85,12 +82,9 @@ export default function Layout({ children, token, setToken }) {
             Section A
           </Heading>
           {sections.map((section) => (
-            <Flex>
-              {section.icon}
-              <Text fontSize="sm" color="white" mx={2}>
-                <SectionLink key={section.name} {...section} />
-              </Text>
-            </Flex>
+            <Link as={RouterLink} to={section.slug} color="white">
+              {section.icon} {section.name}
+            </Link>
           ))}
           <Divider />
         </VStack>

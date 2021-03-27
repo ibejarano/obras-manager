@@ -22,8 +22,8 @@ const LOGIN_MUTATION = gql`
 
 export default function LoginPage({ setToken }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [identifier, setIdentifier] = useState("");
-  const [password, setPassword] = useState("");
+  const [identifier, setIdentifier] = useState("ibejarano@test.com");
+  const [password, setPassword] = useState("terere");
   const [login] = useMutation(LOGIN_MUTATION);
 
   const handleSubmit = async (e) => {

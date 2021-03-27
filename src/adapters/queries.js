@@ -1,5 +1,14 @@
 import { gql } from "@apollo/client";
 
+const ME = gql`
+  query {
+    me {
+      username
+      email
+    }
+  }
+`;
+
 const GET_OBRAS = gql`
   query {
     obras {
@@ -173,4 +182,5 @@ export {
   GET_CALIDAD_WITH_ID,
   GET_OBRAS,
   GET_INVENTARIO_WITH_ID,
+  ME
 };
