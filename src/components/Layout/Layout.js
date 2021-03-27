@@ -17,6 +17,7 @@ import {
   MenuItem,
   Button,
   Link,
+  Skeleton,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
@@ -47,10 +48,7 @@ export default function Layout({ children, setToken }) {
     setToken(null);
   };
 
-  if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
-
-  const { me } = data;
 
   return (
     <Grid
@@ -64,19 +62,21 @@ export default function Layout({ children, setToken }) {
     >
       <GridItem rowSpan={1} colSpan={1}>
         <VStack align="flex-start" spacing={6}>
-          <Menu>
-            <MenuButton
-              as={Button}
-              colorScheme="teal"
-              rightIcon={<ChevronDownIcon />}
-              p="4px"
-            >
-              <UserAvatar {...me} />
-            </MenuButton>
-            <MenuList>
-              <MenuItem onClick={logout}>Salir</MenuItem>
-            </MenuList>
-          </Menu>
+          <Skeleton isLoaded={!loading}>
+            <Menu>
+              <MenuButton
+                as={Button}
+                colorScheme="teal"
+                rightIcon={<ChevronDownIcon />}
+                p="4px"
+              >
+                {!loading && <UserAvatar {...data.me} />}
+              </MenuButton>
+              <MenuList>
+                <MenuItem onClick={logout}>Salir</MenuItem>
+              </MenuList>
+            </Menu>
+          </Skeleton>
 
           <Heading size="sm" color="white">
             Section A
