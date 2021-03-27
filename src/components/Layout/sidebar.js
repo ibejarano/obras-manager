@@ -1,15 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
-
-import {
-  Text,
-  VStack,
-  Divider,
-  Heading,
-  Flex,
-  Avatar,
-  Box,
-} from "@chakra-ui/react";
 
 import {
   HamburgerIcon,
@@ -37,49 +26,4 @@ const sections = [
   },
 ];
 
-function SectionLink({ name, slug }) {
-  return <Link to={slug}>{name}</Link>;
-}
-
-function UserAvatar() {
-  return (
-    <Flex color="white">
-      <Avatar name="Ignacio Bejarano" loading="lazy" />
-      <Box ml="3">
-        <Text fontWeight="bold">Ignacio Sebastian Bejarano</Text>
-        <Text fontSize="sm">Administrador</Text>
-      </Box>
-    </Flex>
-  );
-}
-
-export default function SideBar() {
-  return (
-    <VStack align="flex-start" spacing={6}>
-      <UserAvatar />
-      <Heading size="sm" color="white">
-        Section A
-      </Heading>
-      {sections.map((section) => (
-        <Flex>
-          {section.icon}
-          <Text fontSize="sm" color="white" mx={2}>
-            <SectionLink key={section.name} {...section} />
-          </Text>
-        </Flex>
-      ))}
-      <Divider />
-      <Heading size="sm" color="white">
-        Section B
-      </Heading>
-      {sections.map((section) => (
-        <Flex>
-          {section.icon}
-          <Text fontSize="sm" color="white" mx={2}>
-            <SectionLink key={section.name} {...section} />
-          </Text>
-        </Flex>
-      ))}
-    </VStack>
-  );
-}
+export { sections };
