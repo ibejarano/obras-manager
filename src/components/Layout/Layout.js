@@ -62,13 +62,13 @@ export default function Layout({ children, setToken }) {
     >
       <GridItem rowSpan={1} colSpan={1}>
         <Skeleton isLoaded={!loading}>
-          <VStack align="flex-start" spacing={6}>
+          <VStack align="flex-start" spacing={4}>
             <Menu>
               <MenuButton
                 as={Button}
                 colorScheme="teal"
                 rightIcon={<ChevronDownIcon />}
-                p="4px"
+                p="8px"
               >
                 {!loading && <UserAvatar {...data.me} />}
               </MenuButton>
@@ -77,11 +77,13 @@ export default function Layout({ children, setToken }) {
               </MenuList>
             </Menu>
 
-            <Heading size="sm" color="white">
-              Section A
-            </Heading>
             {sections.map((section) => (
-              <Link as={RouterLink} to={section.slug} color="white">
+              <Link
+                as={RouterLink}
+                to={section.slug}
+                color="white"
+                fontWeight="semibold"
+              >
                 {section.icon} {section.name}
               </Link>
             ))}
