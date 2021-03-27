@@ -61,8 +61,8 @@ export default function Layout({ children, setToken }) {
       bg="cyan.900"
     >
       <GridItem rowSpan={1} colSpan={1}>
-        <VStack align="flex-start" spacing={6}>
-          <Skeleton isLoaded={!loading}>
+        <Skeleton isLoaded={!loading}>
+          <VStack align="flex-start" spacing={6}>
             <Menu>
               <MenuButton
                 as={Button}
@@ -76,18 +76,18 @@ export default function Layout({ children, setToken }) {
                 <MenuItem onClick={logout}>Salir</MenuItem>
               </MenuList>
             </Menu>
-          </Skeleton>
 
-          <Heading size="sm" color="white">
-            Section A
-          </Heading>
-          {sections.map((section) => (
-            <Link as={RouterLink} to={section.slug} color="white">
-              {section.icon} {section.name}
-            </Link>
-          ))}
-          <Divider />
-        </VStack>
+            <Heading size="sm" color="white">
+              Section A
+            </Heading>
+            {sections.map((section) => (
+              <Link as={RouterLink} to={section.slug} color="white">
+                {section.icon} {section.name}
+              </Link>
+            ))}
+            <Divider />
+          </VStack>
+        </Skeleton>
       </GridItem>
       <GridItem colSpan={1} bg="white" borderRadius={10} p={8}>
         {children}
