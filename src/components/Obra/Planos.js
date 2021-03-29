@@ -37,20 +37,26 @@ function TablePlano({ data }) {
             Revision
           </Th>
           <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+            Cant. de archivos
+          </Th>
+          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
             Descargar
           </Th>
         </Tr>
       </Thead>
       <Tbody className="text-gray-700">
-        {data.map(({ id, codigo, nombre, revision, url }) => (
+        {data.map(({ id, codigo, nombre, revision, archivo_aprobado }) => (
           <Tr key={id}>
             <Td>{nombre}</Td>
             <Td>{codigo}</Td>
             <Td>{revision || "-"}</Td>
+            <Td>{archivo_aprobado.length}</Td>
             <Td>
-              <a target="_blank" href={"http://localhost:1337" + url}>
-                <DownloadIcon />
-              </a>
+              {archivo_aprobado.map(({ url }) => (
+                <a target="_blank" href={"http://localhost:1337" + url}>
+                  <DownloadIcon />
+                </a>
+              ))}
             </Td>
           </Tr>
         ))}
