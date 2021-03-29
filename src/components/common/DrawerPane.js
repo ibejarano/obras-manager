@@ -29,9 +29,8 @@ export default function DrawerPane({
           <DrawerBody>{children}</DrawerBody>
           <DrawerFooter>
             <Button variant="outline" mr={3} onClick={onClose}>
-              Cancelar
+              Cerrar
             </Button>
-            <Button color="blue">Guardar</Button>
           </DrawerFooter>
         </DrawerContent>
       </DrawerOverlay>

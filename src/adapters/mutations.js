@@ -128,38 +128,29 @@ const UPDATE_CALIDAD_PLANILLAS = gql`
 `;
 
 // PLANOS MUTATIONS
-
-const UPDATE_PLANO_MECANICO = gql`
-  mutation ModifyCertificados($idObra: ID!, $ids: [ID]!) {
-    updatePlano(input: { where: { id: $idObra }, data: { mecanicos: $ids } }) {
-      plano {
-        mecanicos {
-          id
+const UPLOAD_PLANO = gql`
+  mutation NuevoPlano(
+    $nombre: String!
+    $codigo: String!
+    $revision: String!
+    $tipo: ENUM_PLANO_TIPO
+    $file: [ID!]
+    $obraID: ID!
+  ) {
+    createPlano(
+      input: {
+        data: {
+          nombre: $nombre
+          codigo: $codigo
+          tipo: $tipo
+          archivo_aprobado: $file
+          revision: $revision
+          obra: $obraID
         }
       }
-    }
-  }
-`;
-
-const UPDATE_PLANO_CIVIL = gql`
-  mutation ModifyCertificados($idObra: ID!, $ids: [ID]!) {
-    updatePlano(input: { where: { id: $idObra }, data: { civiles: $ids } }) {
+    ) {
       plano {
-        civiles {
-          id
-        }
-      }
-    }
-  }
-`;
-
-const UPDATE_PLANO_PIPING = gql`
-  mutation ModifyCertificados($idObra: ID!, $ids: [ID]!) {
-    updatePlano(input: { where: { id: $idObra }, data: { piping: $ids } }) {
-      plano {
-        piping {
-          id
-        }
+        nombre
       }
     }
   }
@@ -172,7 +163,5 @@ export {
   UPDATE_CALIDAD_CERTIFICADOS,
   UPDATE_CALIDAD_PROCEDIMIENTOS,
   UPDATE_CALIDAD_PLANILLAS,
-  UPDATE_PLANO_CIVIL,
-  UPDATE_PLANO_MECANICO,
-  UPDATE_PLANO_PIPING,
+  UPLOAD_PLANO,
 };

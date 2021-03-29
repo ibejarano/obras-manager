@@ -2,6 +2,7 @@ import React from "react";
 import { gql, useMutation } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { UPLOAD_PLANO } from "../../adapters/mutations";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilePdf, faFolderOpen } from "@fortawesome/free-solid-svg-icons";
 
@@ -19,20 +20,19 @@ import {
 } from "@chakra-ui/react";
 
 const UPLOAD_FILE = gql`
-  mutation($file: Upload!, $text: String!) {
-    upload(file: $file, info: { caption: $text }) {
+  mutation($file: [Upload]!) {
+    multipleUpload(files: $file) {
       id
     }
   }
 `;
 
 function RenderFilesAdded({ files }) {
-  console.log(files);
   if (files.length > 0) {
     const renderArr = [];
     for (let f of files) {
       renderArr.push(
-        <Box borderBottomWidth={3} borderColor="teal.200"  >
+        <Box borderBottomWidth={3} borderColor="teal.200">
           <Text>
             {f.name} <br /> Tamaño:
             {(f.size / 1024).toFixed(1)} kB
@@ -50,59 +50,56 @@ function RenderFilesAdded({ files }) {
   }
 }
 
-export default function UploadCalidad({
-  valTypes,
-  prevValues,
-  mutations,
-  refetch,
-}) {
+export default function UploadCalidad({ valTypes, refetch }) {
   const { id } = useParams();
-  const [name, setName] = React.useState("");
-  const [fileType, setFileType] = React.useState(valTypes[0]);
+  const [fileInfo, setFileInfo] = React.useState({});
   const [selectedFile, setSelectedFile] = React.useState("");
   const [files, setFiles] = React.useState([]);
   const [uploadFile, { loading, error }] = useMutation(UPLOAD_FILE);
+  const [createPlano, { load, err }] = useMutation(UPLOAD_PLANO);
 
   const handleChange = (e) => {
-    setName(e.target.value);
+    setFileInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const {
-        data: { upload },
+        data: { multipleUpload },
       } = await uploadFile({
         variables: {
           file: selectedFile,
-          text: name,
+        },
+      }).catch(() => {
+        toast.error("Error subiendo archivos");
+      });
+      toast.success("Archivos subidos satisfactoriamente");
+
+      const res = await createPlano({
+        variables: {
+          ...fileInfo,
+          obraID: id,
+          file: multipleUpload.map((m) => m.id),
         },
       });
-
-      const ind = valTypes.indexOf(fileType);
-      const currIds = prevValues[ind].map((p) => p.id);
-      const updateIds = [...currIds, upload.id];
-      const updateRegistry = mutations[ind];
-      await updateRegistry({
-        variables: { ids: updateIds, idObra: id },
-      });
-      toast.success("Archivos subidos satisfactoriamente.");
-      setName("");
+      toast.success("Lista de planos actualizada");
+      setFileInfo({});
       setSelectedFile([]);
       refetch();
     } catch {
-      toast.error("ERROR: No se subieron los archivos");
+      toast.error("Ha ocurrido un error intente nuevamente.");
     }
   };
 
   const handleFileUpload = (e) => {
     setFiles(e.target.files);
     setSelectedFile(e.target.files);
-    // e.target.value = null;
   };
 
   if (error) return <div>{JSON.stringify(error)}</div>;
+
+  const { nombre, codigo, revision, tipo } = fileInfo;
 
   return (
     <form onSubmit={handleSubmit}>
@@ -113,17 +110,43 @@ export default function UploadCalidad({
           onChange={handleChange}
           name="nombre"
           id="nombre_archivo"
-          value={name}
+          value={nombre}
           required
         />
       </FormControl>
 
-      <FormControl id="tipo_archivo" my={4}>
-        <FormLabel>Tipo de archivo</FormLabel>
+      <FormControl id="codigo" my={4}>
+        <FormLabel>Codigo</FormLabel>
+        <Input
+          type="text"
+          onChange={handleChange}
+          name="codigo"
+          id="codigo"
+          value={codigo}
+          required
+        />
+      </FormControl>
+
+      <FormControl id="revision" my={4}>
+        <FormLabel>Revision</FormLabel>
+        <Input
+          type="text"
+          onChange={handleChange}
+          name="revision"
+          id="codigo"
+          value={revision}
+          required
+        />
+      </FormControl>
+
+      <FormControl id="tipo" my={4}>
+        <FormLabel>Tipo de plano</FormLabel>
         <Select
           placeholder="Seleccione uno"
-          name="tipo_archivo"
-          onChange={(e) => setFileType(e.target.value)}
+          name="tipo"
+          onChange={handleChange}
+          value={tipo}
+          required
         >
           {valTypes.map((val) => (
             <option value={val} key={val}>
@@ -149,7 +172,9 @@ export default function UploadCalidad({
             <RenderFilesAdded files={files} />
           </Box>
         </FormLabel>
-        <Text fontSize="sm" color="blackAlpha.600" >Tamaño maximo de cada archivo: 10MB</Text>
+        <Text fontSize="sm" color="blackAlpha.600">
+          Tamaño maximo de cada archivo: 10MB
+        </Text>
       </FormControl>
 
       <Button type="submit">Guardar</Button>

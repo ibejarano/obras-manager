@@ -76,8 +76,7 @@ export default function Planos() {
     obra: { planos },
   } = data;
 
-  // const { id, codigo, nombre , tipo} = planos;
-  const tipos = ["piping", "estructural", "mecanicos"];
+  const tipos = ["piping", "civil", "mecanico", "otro"];
 
   return (
     <React.Fragment>
@@ -92,22 +91,20 @@ export default function Planos() {
       </Button>
       <Tabs my={4}>
         <TabList>
-          {/* {tipos.map} */}
-          <Tab>Piping</Tab>
-          {/* <Tab>Mecanico</Tab>
-          <Tab>Civil</Tab> */}
+          {tipos.map((tipo) => (
+            <Tab key={tipo}>{tipo.toUpperCase()}</Tab>
+          ))}
         </TabList>
 
         <TabPanels>
-          <TabPanel>
-            <TablePlano data={planos} tipo="Piping" />
-          </TabPanel>
-          {/* <TabPanel>
-            <TablePlano data={civiles} tipo="Mecanico" />
-          </TabPanel>
-          <TabPanel>
-            <TablePlano data={mecanicos} tipo="Piping" />
-          </TabPanel> */}
+          {tipos.map((tipo) => (
+            <TabPanel>
+              <TablePlano
+                data={planos.filter((plano) => plano.tipo == tipo)}
+                tipo={tipo}
+              />
+            </TabPanel>
+          ))}
         </TabPanels>
       </Tabs>
       <DrawerPane
@@ -116,7 +113,7 @@ export default function Planos() {
         isOpen={isOpen}
         btnRef={btnRef}
       >
-        {/* <UploadPlanos plano={plano} refetch={refetch} /> */}
+        <UploadPlanos refetch={refetch} tipos={tipos} />
       </DrawerPane>
     </React.Fragment>
   );
