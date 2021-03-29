@@ -122,21 +122,14 @@ const GET_PERSONAS_WITH_ID = gql`
 const GET_PLANOS_WITH_ID = gql`
   query($idObra: ID!) {
     obra(id: $idObra) {
-      plano {
-        civiles {
-          id
+      planos {
+        id
+        codigo
+        nombre
+        tipo
+        revision
+        archivo_aprobado {
           url
-          name
-        }
-        mecanicos {
-          id
-          url
-          name
-        }
-        piping {
-          id
-          url
-          name
         }
       }
     }
@@ -182,5 +175,5 @@ export {
   GET_CALIDAD_WITH_ID,
   GET_OBRAS,
   GET_INVENTARIO_WITH_ID,
-  ME
+  ME,
 };

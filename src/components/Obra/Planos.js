@@ -28,7 +28,13 @@ function TablePlano({ data }) {
       <Thead className="bg-gray-800 text-white">
         <Tr>
           <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Nombre del plano
+            Titulo
+          </Th>
+          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+            Codigo
+          </Th>
+          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+            Revision
           </Th>
           <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
             Descargar
@@ -36,9 +42,11 @@ function TablePlano({ data }) {
         </Tr>
       </Thead>
       <Tbody className="text-gray-700">
-        {data.map(({ name, url }) => (
-          <Tr>
-            <Td>{name}</Td>
+        {data.map(({ id, codigo, nombre, revision, url }) => (
+          <Tr key={id}>
+            <Td>{nombre}</Td>
+            <Td>{codigo}</Td>
+            <Td>{revision || "-"}</Td>
             <Td>
               <a target="_blank" href={"http://localhost:1337" + url}>
                 <DownloadIcon />
@@ -65,10 +73,11 @@ export default function Planos() {
   if (error) return <p>Error :(</p>;
 
   const {
-    obra: { plano },
+    obra: { planos },
   } = data;
 
-  const { civiles, mecanicos, piping } = plano;
+  // const { id, codigo, nombre , tipo} = planos;
+  const tipos = ["piping", "estructural", "mecanicos"];
 
   return (
     <React.Fragment>
@@ -83,21 +92,22 @@ export default function Planos() {
       </Button>
       <Tabs my={4}>
         <TabList>
+          {/* {tipos.map} */}
           <Tab>Piping</Tab>
-          <Tab>Mecanico</Tab>
-          <Tab>Civil</Tab>
+          {/* <Tab>Mecanico</Tab>
+          <Tab>Civil</Tab> */}
         </TabList>
 
         <TabPanels>
           <TabPanel>
-            <TablePlano data={piping} tipo="Civil" />
+            <TablePlano data={planos} tipo="Piping" />
           </TabPanel>
-          <TabPanel>
+          {/* <TabPanel>
             <TablePlano data={civiles} tipo="Mecanico" />
           </TabPanel>
           <TabPanel>
             <TablePlano data={mecanicos} tipo="Piping" />
-          </TabPanel>
+          </TabPanel> */}
         </TabPanels>
       </Tabs>
       <DrawerPane
@@ -106,7 +116,7 @@ export default function Planos() {
         isOpen={isOpen}
         btnRef={btnRef}
       >
-        <UploadPlanos plano={plano} refetch={refetch} />
+        {/* <UploadPlanos plano={plano} refetch={refetch} /> */}
       </DrawerPane>
     </React.Fragment>
   );
