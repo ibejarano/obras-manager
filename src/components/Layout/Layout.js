@@ -21,7 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
-import { sections } from "./sidebar";
+import { sections, qa, planos } from "./sidebar";
 import { ME } from "../../adapters/queries";
 
 function UserAvatar({ username, email }) {
@@ -62,7 +62,7 @@ export default function Layout({ children, setToken }) {
     >
       <GridItem rowSpan={1} colSpan={1}>
         <Skeleton isLoaded={!loading}>
-          <VStack align="flex-start" spacing={4}>
+          <VStack align="flex-start" spacing={4} color="white">
             <Menu>
               <MenuButton
                 as={Button}
@@ -76,14 +76,30 @@ export default function Layout({ children, setToken }) {
                 <MenuItem onClick={logout}>Salir</MenuItem>
               </MenuList>
             </Menu>
-
+            <Divider />
+            <Heading color="whiteAlpha.800" fontSize="md">
+              General
+            </Heading>
             {sections.map((section) => (
-              <Link
-                as={RouterLink}
-                to={section.slug}
-                color="white"
-                fontWeight="semibold"
-              >
+              <Link as={RouterLink} to={section.slug} fontWeight="semibold">
+                {section.icon} {section.name}
+              </Link>
+            ))}
+            <Divider />
+            <Heading color="whiteAlpha.800" fontSize="sm">
+              Calidad
+            </Heading>
+            {qa.map((section) => (
+              <Link as={RouterLink} to={section.slug} fontWeight="semibold">
+                {section.icon} {section.name}
+              </Link>
+            ))}
+            <Divider />
+            <Heading color="whiteAlpha.800" fontSize="sm">
+              Planos
+            </Heading>
+            {planos.map((section) => (
+              <Link as={RouterLink} to={section.slug} fontWeight="semibold">
                 {section.icon} {section.name}
               </Link>
             ))}
