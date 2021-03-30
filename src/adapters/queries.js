@@ -139,28 +139,11 @@ const GET_PLANOS_WITH_ID = gql`
 const GET_CALIDAD_WITH_ID = gql`
   query($idObra: ID!) {
     obra(id: $idObra) {
-      calidad {
-        certificados {
-          url
-          name
-          caption
-          id
-          created_at
-        }
-        planillas {
-          url
-          name
-          caption
-          id
-          created_at
-        }
-        procedimientos {
-          url
-          name
-          caption
-          created_at
-          id
-        }
+      calidads {
+        id
+        tipo
+        revision
+        nombre
       }
     }
   }

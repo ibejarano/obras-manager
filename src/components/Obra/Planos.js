@@ -105,10 +105,7 @@ export default function Planos() {
         <TabPanels>
           {tipos.map((tipo) => (
             <TabPanel>
-              <TablePlano
-                data={planos.filter((plano) => plano.tipo == tipo)}
-                tipo={tipo}
-              />
+              <TablePlano data={planos.filter((plano) => plano.tipo == tipo)} />
             </TabPanel>
           ))}
         </TabPanels>

@@ -28,6 +28,8 @@ import {
 
 import { AddIcon, DownloadIcon } from "@chakra-ui/icons";
 
+import DrawerPane from "../common/DrawerPane";
+
 function TableRow({ name, url, caption, created_at }) {
   const created = new Date(created_at);
   return (
@@ -48,7 +50,7 @@ function TableRow({ name, url, caption, created_at }) {
   );
 }
 
-function Tabla({ data }) {
+function TablaQa({ data }) {
   return (
     <Table className="min-w-full bg-white">
       <Thead className="bg-gray-800 text-white">
@@ -87,13 +89,13 @@ export default function Calidad() {
   });
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :(</p>;
+  if (error) return <p>{JSON.stringify(error)}</p>;
 
   const {
-    obra: { calidad },
+    obra: { calidads },
   } = data;
 
-  const { certificados, procedimientos, planillas } = calidad;
+  const tipos = ["procedimiento", "planilla", "certificado"];
 
   return (
     <React.Fragment>
@@ -108,46 +110,29 @@ export default function Calidad() {
       </Button>
       <Tabs my={4}>
         <TabList>
-          <Tab>Certificados</Tab>
-          <Tab>Procedimientos</Tab>
-          <Tab>Planillas</Tab>
+          {tipos.map((t) => (
+            <Tab>{t}</Tab>
+          ))}
         </TabList>
 
         <TabPanels>
-          <TabPanel>
-            <Tabla data={certificados} />
-          </TabPanel>
-          <TabPanel>
-            <Tabla data={procedimientos} />
-          </TabPanel>
-          <TabPanel>
-            <Tabla data={planillas} />
-          </TabPanel>
+          {tipos.map((tipo) => (
+            <TabPanel>
+              <TablaQa
+                data={calidads.filter((calidad) => calidad.tipo == tipo)}
+              />
+            </TabPanel>
+          ))}
         </TabPanels>
       </Tabs>
-      <Drawer
-        isOpen={isOpen}
-        placement="right"
+      <DrawerPane
+        headerText="Subir Planos"
         onClose={onClose}
-        finalFocusRef={btnRef}
+        isOpen={isOpen}
+        btnRef={btnRef}
       >
-        <DrawerOverlay>
-          <DrawerContent>
-            <DrawerHeader>Subir nuevos archivos</DrawerHeader>
-
-            <DrawerBody>
-              <UploadCalidad {...calidad} refetch={refetch} />
-            </DrawerBody>
-
-            <DrawerFooter>
-              <Button variant="outline" mr={3} onClick={onClose}>
-                Cancelar
-              </Button>
-              <Button color="blue">Guardar</Button>
-            </DrawerFooter>
-          </DrawerContent>
-        </DrawerOverlay>
-      </Drawer>
+        <UploadCalidad {...calidads} refetch={refetch} />
+      </DrawerPane>
     </React.Fragment>
   );
 }
