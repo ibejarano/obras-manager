@@ -3,17 +3,12 @@ import { gql, useMutation } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { UPLOAD_PLANO } from "../../adapters/mutations";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilePdf, faFolderOpen } from "@fortawesome/free-solid-svg-icons";
 
 import {
   FormControl,
   FormLabel,
   Input,
   Button,
-  Radio,
-  RadioGroup,
-  Stack,
   Text,
   Select,
   Box,
@@ -50,13 +45,13 @@ function RenderFilesAdded({ files }) {
   }
 }
 
-export default function UploadCalidad({ valTypes, refetch }) {
+export default function UploadCalidad({ valTypes, refetch, MUTATION_GQL }) {
   const { id } = useParams();
   const [fileInfo, setFileInfo] = React.useState({});
   const [selectedFile, setSelectedFile] = React.useState("");
   const [files, setFiles] = React.useState([]);
   const [uploadFile, { loading, error }] = useMutation(UPLOAD_FILE);
-  const [createPlano, { load, err }] = useMutation(UPLOAD_PLANO);
+  const [createPlano, { load, err }] = useMutation(MUTATION_GQL);
 
   const handleChange = (e) => {
     setFileInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -64,6 +59,7 @@ export default function UploadCalidad({ valTypes, refetch }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const {
         data: { multipleUpload },
@@ -87,7 +83,8 @@ export default function UploadCalidad({ valTypes, refetch }) {
       setFileInfo({});
       setSelectedFile([]);
       refetch();
-    } catch {
+    } catch (error) {
+      console.log(JSON.stringify(error));
       toast.error("Ha ocurrido un error intente nuevamente.");
     }
   };

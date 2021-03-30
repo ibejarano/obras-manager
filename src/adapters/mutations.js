@@ -83,50 +83,6 @@ const CREATE_ESTRUCTURAL_ENTRY = gql`
   }
 `;
 
-// CALIDAD MUTATIONS
-
-const UPDATE_CALIDAD_CERTIFICADOS = gql`
-  mutation ModifyCertificados($idObra: ID!, $ids: [ID]!) {
-    updateCalidad(
-      input: { where: { id: $idObra }, data: { certificados: $ids } }
-    ) {
-      calidad {
-        certificados {
-          id
-        }
-      }
-    }
-  }
-`;
-
-const UPDATE_CALIDAD_PROCEDIMIENTOS = gql`
-  mutation ModifyProcedimiento($idObra: ID!, $ids: [ID]!) {
-    updateCalidad(
-      input: { where: { id: $idObra }, data: { procedimientos: $ids } }
-    ) {
-      calidad {
-        procedimientos {
-          id
-        }
-      }
-    }
-  }
-`;
-
-const UPDATE_CALIDAD_PLANILLAS = gql`
-  mutation ModifyPlanillas($idObra: ID!, $ids: [ID]!) {
-    updateCalidad(
-      input: { where: { id: $idObra }, data: { planillas: $ids } }
-    ) {
-      calidad {
-        planillas {
-          id
-        }
-      }
-    }
-  }
-`;
-
 // PLANOS MUTATIONS
 const UPLOAD_PLANO = gql`
   mutation NuevoPlano(
@@ -156,12 +112,38 @@ const UPLOAD_PLANO = gql`
   }
 `;
 
+const UPLOAD_CALIDAD = gql`
+  mutation NuevoCalidad(
+    $nombre: String!
+    $codigo: String!
+    $revision: String!
+    $tipo: ENUM_CALIDAD_TIPO
+    $file: [ID!]
+    $obraID: ID!
+  ) {
+    createCalidad(
+      input: {
+        data: {
+          nombre: $nombre
+          codigo: $codigo
+          tipo: $tipo
+          archivo: $file
+          revision: $revision
+          obra: $obraID
+        }
+      }
+    ) {
+      calidad {
+        nombre
+      }
+    }
+  }
+`;
+
 export {
   CREATE_ESTRUCTURAL_ENTRY,
   CREATE_PIPING_ENTRY,
   CREATE_WELDING_ENTRY,
-  UPDATE_CALIDAD_CERTIFICADOS,
-  UPDATE_CALIDAD_PROCEDIMIENTOS,
-  UPDATE_CALIDAD_PLANILLAS,
   UPLOAD_PLANO,
+  UPLOAD_CALIDAD,
 };

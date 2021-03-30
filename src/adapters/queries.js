@@ -143,7 +143,11 @@ const GET_CALIDAD_WITH_ID = gql`
         id
         tipo
         revision
+        codigo
         nombre
+        archivo {
+          url
+        }
       }
     }
   }

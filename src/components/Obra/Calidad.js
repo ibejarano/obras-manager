@@ -11,12 +11,6 @@ import {
   Tr,
   Th,
   Td,
-  Drawer,
-  DrawerBody,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
   Button,
   useDisclosure,
   Tabs,
@@ -30,21 +24,19 @@ import { AddIcon, DownloadIcon } from "@chakra-ui/icons";
 
 import DrawerPane from "../common/DrawerPane";
 
-function TableRow({ name, url, caption, created_at }) {
-  const created = new Date(created_at);
+function TableRow({ nombre, codigo, revision, archivo }) {
   return (
-    <Tr className="bg-gray-200">
-      <Td className="w-1/3 text-left py-3 px-4">{name}</Td>
-      <Td className="w-1/3 text-left py-3 px-4">
-        {caption || "Sin Descripcion"}
-      </Td>
-      <Td className="w-1/3 text-left py-3 px-4">
-        {created.toLocaleDateString("es-AR")}
-      </Td>
-      <Td className="w-1/3 text-left py-3 px-4">
-        <a target="_blank" href={"http://localhost:1337" + url}>
-          <DownloadIcon />
-        </a>
+    <Tr>
+      <Td>{nombre}</Td>
+      <Td>{codigo}</Td>
+      <Td>{revision || "-"}</Td>
+      <Td>{archivo.length}</Td>
+      <Td>
+        {archivo.map(({ url }) => (
+          <a target="_blank" href={"http://localhost:1337" + url}>
+            <DownloadIcon />
+          </a>
+        ))}
       </Td>
     </Tr>
   );
@@ -52,24 +44,17 @@ function TableRow({ name, url, caption, created_at }) {
 
 function TablaQa({ data }) {
   return (
-    <Table className="min-w-full bg-white">
-      <Thead className="bg-gray-800 text-white">
+    <Table>
+      <Thead>
         <Tr>
-          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Nombre
-          </Th>
-          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Descripcion
-          </Th>
-          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Fecha de carga
-          </Th>
-          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Descargar
-          </Th>
+          <Th>Titulo</Th>
+          <Th>Codigo</Th>
+          <Th>Revision</Th>
+          <Th>Cant. de archivos</Th>
+          <Th>Descargar</Th>
         </Tr>
       </Thead>
-      <Tbody className="text-gray-700">
+      <Tbody>
         {data.map((row) => (
           <TableRow {...row} key={row.url} />
         ))}
@@ -131,7 +116,7 @@ export default function Calidad() {
         isOpen={isOpen}
         btnRef={btnRef}
       >
-        <UploadCalidad {...calidads} refetch={refetch} />
+        <UploadCalidad tipos={tipos} refetch={refetch} />
       </DrawerPane>
     </React.Fragment>
   );
