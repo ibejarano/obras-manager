@@ -1,5 +1,7 @@
 import React from "react";
 
+import { useTable } from "react-table";
+
 import {
   Table,
   Thead,
@@ -23,42 +25,42 @@ function searchField(item, fields, term) {
   return false;
 }
 
-function TableRow({
-  diametro_pulg,
-  cantidad,
-  num_serie,
-  material,
-  tipo_perfil,
-  descripcion,
-  obra,
-}) {
-  return (
-    <Tr>
-      {descripcion && <Td>{descripcion}</Td>}
-      <Td>{diametro_pulg || tipo_perfil}</Td>
-      <Td>{cantidad}</Td>
-      <Td>{material || "-"}</Td>
-      <Td>{num_serie || "-"}</Td>
-      {obra && <Td>{obra.nombre}</Td>}
-    </Tr>
-  );
-}
+function RenderTable({ materiales, headers }) {
+  const data = React.useMemo(() => materiales, []);
+  const columns = React.useMemo(() => headers, []);
 
-function PipingTable({ materiales }) {
+  const tableInstance = useTable({ columns, data });
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+  } = tableInstance;
+
   return (
-    <Table colorScheme="teal">
+    <Table colorScheme="teal" {...getTableProps()}>
       <Thead>
-        <Tr>
-          <Th>Diametro [pulg]</Th>
-          <Th>Cantidad [metros]</Th>
-          <Th>Material</Th>
-          <Th>Serie</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {materiales.map((material, idx) => (
-          <TableRow key={idx} {...material} />
+        {headerGroups.map((headerGroup) => (
+          <Tr {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map((column) => (
+              <Th {...column.getHeaderProps()}>{column.render("Header")}</Th>
+            ))}
+          </Tr>
         ))}
+      </Thead>
+      <Tbody {...getTableBodyProps()}>
+        {rows.map((row) => {
+          prepareRow(row);
+          return (
+            <Tr {...row.getRowProps()}>
+              {row.cells.map((cell) => {
+                return <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>;
+              })}
+            </Tr>
+          );
+        })}
       </Tbody>
     </Table>
   );
@@ -79,108 +81,90 @@ function PipingTables({ inventarios, text }) {
         </Tr>
       </Thead>
       <Tbody>
-        {inventarios.map(({ piping, obra }) =>
+        {/* {inventarios.map(({ piping, obra }) =>
           piping
             .filter((item) => searchField(item, SEARCH_FIELDS, text))
             .map((foundedItem, idx) => (
               <TableRow key={idx} {...foundedItem} obra={obra} />
             ))
-        )}
+        )} */}
       </Tbody>
     </Table>
   );
 }
 
-function WeldingTable({ materiales }) {
-  return (
-    <Table colorScheme="teal">
-      <Thead>
-        <Tr>
-          <Th>Descripcion</Th>
-          <Th>Diametro [pulg]</Th>
-          <Th>Unidades</Th>
-          <Th>Material</Th>
-          <Th>Serie</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {materiales.map((material, idx) => (
-          <TableRow key={idx} {...material} />
-        ))}
-      </Tbody>
-    </Table>
-  );
-}
-
-function EstructTable({ materiales }) {
-  return (
-    <Table colorScheme="teal">
-      <Thead>
-        <Tr>
-          <Th>Tipo de perfil</Th>
-          <Th>Cantidad [metros]</Th>
-          <Th>Material</Th>
-          <Th>Serie</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {materiales.map((material, idx) => (
-          <TableRow key={idx} {...material} />
-        ))}
-      </Tbody>
-    </Table>
-  );
-}
-
-function EstructTables({ inventarios, text }) {
-  const SEARCH_FIELDS = ["material", "tipo_perfil"];
-
-  return (
-    <Table colorScheme="teal">
-      <Thead>
-        <Tr>
-          <Th>Tipo de perfil</Th>
-          <Th>Cantidad [metros]</Th>
-          <Th>Material</Th>
-          <Th>Serie</Th>
-          <Th>Obra</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {inventarios.map(({ estructural, obra }) =>
-          estructural
-            .filter((item) => searchField(item, SEARCH_FIELDS, text))
-            .map((foundedItem, idx) => (
-              <TableRow key={idx} {...foundedItem} obra={obra} />
-            ))
-        )}
-      </Tbody>
-    </Table>
-  );
-}
-
-export default function InventarioObra({ piping, estructural, welding }) {
-  console.log(piping);
+export default function InventarioObra({ inventario }) {
+  const piping_headers = [
+    {
+      Header: "Diametro",
+      accessor: "diametro_pulg", // accessor is the "key" in the data
+    },
+    {
+      Header: "Cantidad",
+      accessor: "cantidad",
+    },
+    {
+      Header: "Serie",
+      accessor: "num_serie",
+    },
+  ];
+  const estructural_headers = [
+    {
+      Header: "Perfil",
+      accessor: "tipo_perfil", // accessor is the "key" in the data
+    },
+    {
+      Header: "Cantidad",
+      accessor: "cantidad",
+    },
+    {
+      Header: "Serie",
+      accessor: "num_serie",
+    },
+  ];
+  const welding_headers = [
+    {
+      Header: "Diametro",
+      accessor: "diametro_pulg", // accessor is the "key" in the data
+    },
+    {
+      Header: "Cantidad",
+      accessor: "cantidad",
+    },
+    {
+      Header: "Serie",
+      accessor: "num_serie",
+    },
+  ];
   return (
     <Tabs variant="enclosed-colored" my={4}>
       <TabList>
         <Tab>Piping</Tab>
-        <Tab>Welding</Tab>
         <Tab>Estructural</Tab>
+        <Tab>Welding</Tab>
       </TabList>
       <TabPanels>
         <TabPanel>
-          <PipingTable materiales={piping} />
+          <RenderTable
+            materiales={inventario.filter((mat) => mat.tipo == "piping")}
+            headers={piping_headers}
+          />
         </TabPanel>
         <TabPanel>
-          <WeldingTable materiales={welding} />
+          <RenderTable
+            materiales={inventario.filter((mat) => mat.tipo == "estructural")}
+            headers={estructural_headers}
+          />
         </TabPanel>
         <TabPanel>
-          <EstructTable materiales={estructural} />
+          <RenderTable
+            materiales={inventario.filter((mat) => mat.tipo == "welding")}
+            headers={welding_headers}
+          />
         </TabPanel>
       </TabPanels>
     </Tabs>
   );
 }
 
-export { PipingTables, EstructTables };
+export { PipingTables };

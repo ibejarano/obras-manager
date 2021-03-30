@@ -4,7 +4,6 @@ import { Input, Radio, RadioGroup, Stack } from "@chakra-ui/react";
 
 import {
   PipingTables,
-  EstructTables,
 } from "../components/Inventarios/InventarioObra";
 import { GET_INVENTARIOS } from "../adapters/queries";
 
@@ -34,9 +33,9 @@ export default function Inventarios() {
       {category == "piping" && (
         <PipingTables inventarios={inventarios} text={searchText} />
       )}
-      {category == "estructural" && (
+      {/* {category == "estructural" && (
         <EstructTables inventarios={inventarios} text={searchText} />
-      )}
+      )} */}
     </main>
   );
 }
