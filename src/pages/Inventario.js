@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { Input, Radio, RadioGroup, Stack } from "@chakra-ui/react";
 
-import {
-  PipingTables,
-} from "../components/Inventarios/InventarioObra";
+// import {
+//   PipingTables,
+// } from "../components/Inventarios/InventarioObra";
 import { GET_INVENTARIOS } from "../adapters/queries";
 
 export default function Inventarios() {
@@ -30,9 +30,9 @@ export default function Inventarios() {
           <Radio value="estructural">Estructural</Radio>
         </Stack>
       </RadioGroup>
-      {category == "piping" && (
+      {/* {category == "piping" && (
         <PipingTables inventarios={inventarios} text={searchText} />
-      )}
+      )} */}
       {/* {category == "estructural" && (
         <EstructTables inventarios={inventarios} text={searchText} />
       )} */}

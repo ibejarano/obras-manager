@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useQuery } from "@apollo/client";
 import { Link as RouterLink } from "react-router-dom";
 import {
@@ -21,7 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
-import { sections, qa, planos } from "./sidebar";
+import { sections, archivos } from "./sidebar";
 import { ME } from "../../adapters/queries";
 
 function UserAvatar({ username, email }) {
@@ -87,23 +87,13 @@ export default function Layout({ children, setToken }) {
             ))}
             <Divider />
             <Heading color="whiteAlpha.800" fontSize="sm">
-              Calidad
+              Archivos
             </Heading>
-            {qa.map((section) => (
+            {archivos.map((section) => (
               <Link as={RouterLink} to={section.slug} fontWeight="semibold">
                 {section.icon} {section.name}
               </Link>
             ))}
-            <Divider />
-            <Heading color="whiteAlpha.800" fontSize="sm">
-              Planos
-            </Heading>
-            {planos.map((section) => (
-              <Link as={RouterLink} to={section.slug} fontWeight="semibold">
-                {section.icon} {section.name}
-              </Link>
-            ))}
-            <Divider />
           </VStack>
         </Skeleton>
       </GridItem>

@@ -1,97 +1,7 @@
 import React from "react";
+import { Tabs, TabList, TabPanel, Tab, TabPanels } from "@chakra-ui/react";
 
-import { useTable } from "react-table";
-
-import {
-  Table,
-  Thead,
-  Tbody,
-  Td,
-  Tr,
-  Th,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
-} from "@chakra-ui/react";
-
-function searchField(item, fields, term) {
-  for (let field of fields) {
-    if (item[field].search(term) >= 0) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function RenderTable({ materiales, headers }) {
-  const data = React.useMemo(() => materiales, []);
-  const columns = React.useMemo(() => headers, []);
-
-  const tableInstance = useTable({ columns, data });
-
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = tableInstance;
-
-  return (
-    <Table colorScheme="teal" {...getTableProps()}>
-      <Thead>
-        {headerGroups.map((headerGroup) => (
-          <Tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column) => (
-              <Th {...column.getHeaderProps()}>{column.render("Header")}</Th>
-            ))}
-          </Tr>
-        ))}
-      </Thead>
-      <Tbody {...getTableBodyProps()}>
-        {rows.map((row) => {
-          prepareRow(row);
-          return (
-            <Tr {...row.getRowProps()}>
-              {row.cells.map((cell) => {
-                return <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>;
-              })}
-            </Tr>
-          );
-        })}
-      </Tbody>
-    </Table>
-  );
-}
-
-function PipingTables({ inventarios, text }) {
-  const SEARCH_FIELDS = ["material", "num_serie"];
-
-  return (
-    <Table colorScheme="teal">
-      <Thead>
-        <Tr>
-          <Th>Diametro [pulg]</Th>
-          <Th>Cantidad [metros]</Th>
-          <Th>Material</Th>
-          <Th>Serie</Th>
-          <Th>Obra</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {/* {inventarios.map(({ piping, obra }) =>
-          piping
-            .filter((item) => searchField(item, SEARCH_FIELDS, text))
-            .map((foundedItem, idx) => (
-              <TableRow key={idx} {...foundedItem} obra={obra} />
-            ))
-        )} */}
-      </Tbody>
-    </Table>
-  );
-}
+import RenderTable from "../common/Table";
 
 export default function InventarioObra({ inventario }) {
   const piping_headers = [
@@ -166,5 +76,3 @@ export default function InventarioObra({ inventario }) {
     </Tabs>
   );
 }
-
-export { PipingTables };

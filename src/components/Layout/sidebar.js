@@ -16,40 +16,17 @@ const sections = [
   },
 ];
 
-const qa = [
+const archivos = [
   {
-    name: "Certificados",
-    slug: "/personal",
+    name: "Calidad",
+    slug: "/qa",
     icon: <CopyIcon color="white" />,
   },
   {
-    name: "Planillas",
-    slug: "/inventarios",
-    icon: <CopyIcon color="white" />,
-  },
-  {
-    name: "Procedimientos",
-    slug: "/inventarios",
+    name: "Planos",
+    slug: "/planos",
     icon: <CopyIcon color="white" />,
   },
 ];
 
-const planos = [
-  {
-    name: "Mecanicos",
-    slug: "/personal",
-    icon: <CopyIcon color="white" />,
-  },
-  {
-    name: "Civiles",
-    slug: "/inventarios",
-    icon: <CopyIcon color="white" />,
-  },
-  {
-    name: "Piping",
-    slug: "/inventarios",
-    icon: <CopyIcon color="white" />,
-  },
-];
-
-export { sections, qa, planos };
+export { sections, archivos };
