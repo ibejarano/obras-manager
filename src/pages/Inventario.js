@@ -1,41 +1,62 @@
-import React, { useState } from "react";
+import React from "react";
 import { useQuery } from "@apollo/client";
-import { Input, Radio, RadioGroup, Stack } from "@chakra-ui/react";
+import {
+  Tabs,
+  TabList,
+  TabPanel,
+  Tab,
+  TabPanels,
+  Heading,
+} from "@chakra-ui/react";
 
-// import {
-//   PipingTables,
-// } from "../components/Inventarios/InventarioObra";
-import { GET_INVENTARIOS } from "../adapters/queries";
+import RenderTable from "../components/common/Table";
+import { GET_INVENTARIOS_ALL } from "../adapters/queries";
+import {
+  piping_headers,
+  estructural_headers,
+  welding_headers,
+} from "../components/Inventarios/headers";
 
 export default function Inventarios() {
-  const { loading, error, data } = useQuery(GET_INVENTARIOS);
-  const [category, setCategory] = useState("piping");
-  const [searchText, setSearchText] = useState("");
+  const { loading, error, data } = useQuery(GET_INVENTARIOS_ALL);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
-  const { inventarios } = data;
+  const { materials } = data;
+
   return (
     <main>
-      <h1>Inventario</h1>
-      <Input
-        placeholder="Type something to search..."
-        value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
-      />
-      <RadioGroup onChange={setCategory} value={category}>
-        <Stack direction="row">
-          <Radio value="piping">Piping</Radio>
-          <Radio value="estructural">Estructural</Radio>
-        </Stack>
-      </RadioGroup>
-      {/* {category == "piping" && (
-        <PipingTables inventarios={inventarios} text={searchText} />
-      )} */}
-      {/* {category == "estructural" && (
-        <EstructTables inventarios={inventarios} text={searchText} />
-      )} */}
+      <Heading fontSize="lg">Inventario</Heading>
+
+      <Tabs variant="enclosed-colored" my={4}>
+        <TabList>
+          <Tab>Piping</Tab>
+          <Tab>Estructural | Perfiles</Tab>
+          <Tab>Welding</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <RenderTable
+              materiales={materials.filter((mat) => mat.tipo == "piping")}
+              headers={piping_headers}
+            />
+          </TabPanel>
+          <TabPanel>
+            <RenderTable
+              materiales={materials.filter((mat) => mat.tipo == "estructural")}
+              headers={estructural_headers}
+            />
+          </TabPanel>
+
+          <TabPanel>
+            <RenderTable
+              materiales={materials.filter((mat) => mat.tipo == "welding")}
+              headers={welding_headers}
+            />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </main>
   );
 }

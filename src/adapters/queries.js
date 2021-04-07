@@ -77,6 +77,19 @@ const GET_INVENTARIO_WITH_ID = gql`
   }
 `;
 
+const GET_INVENTARIOS_ALL = gql`
+  query {
+    materials {
+      diametro_pulg
+      cantidad
+      num_serie
+      tipo
+      material
+      tipo_perfil
+    }
+  }
+`;
+
 const GET_PERSONAS = gql`
   query {
     people {
@@ -172,5 +185,6 @@ export {
   GET_INVENTARIO_WITH_ID,
   GET_CALIDAD_ALL,
   GET_PLANOS_ALL,
+  GET_INVENTARIOS_ALL,
   ME,
 };
