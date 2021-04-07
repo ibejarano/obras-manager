@@ -8,10 +8,6 @@ import RenderTable from "../components/common/Table";
 export default function CalidadPage() {
   const headers = [
     {
-      Header: "Tipo",
-      accessor: "tipo", // accessor is the "key" in the data
-    },
-    {
       Header: "Nombre",
       accessor: "nombre",
     },
