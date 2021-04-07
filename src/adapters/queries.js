@@ -91,6 +91,30 @@ const GET_PERSONAS = gql`
   }
 `;
 
+const GET_CALIDAD_ALL = gql`
+  query {
+    calidads {
+      tipo
+      id
+      nombre
+      revision
+      codigo
+    }
+  }
+`;
+
+const GET_PLANOS_ALL = gql`
+  query {
+    planos {
+      tipo
+      id
+      nombre
+      revision
+      codigo
+    }
+  }
+`;
+
 const GET_PERSONAS_WITH_ID = gql`
   query($idObra: ID!) {
     obra(id: $idObra) {
@@ -146,5 +170,7 @@ export {
   GET_CALIDAD_WITH_ID,
   GET_OBRAS,
   GET_INVENTARIO_WITH_ID,
+  GET_CALIDAD_ALL,
+  GET_PLANOS_ALL,
   ME,
 };

@@ -7,6 +7,8 @@ import Layout from "./components/Layout";
 // import DummyContent from "./components/DummyContent";
 import Dashboard from "./pages/Dashboard";
 import EventsTable from "./components/Events";
+import Calidad from "./pages/Calidad";
+import Planos from "./pages/Planos";
 import Personal from "./pages/Personal";
 import Inventario from "./pages/Inventario";
 
@@ -26,6 +28,12 @@ function App() {
     <Router>
       <Layout setToken={setToken}>
         <Switch>
+          <Route path="/planos">
+            <Planos />
+          </Route>
+          <Route path="/qa">
+            <Calidad />
+          </Route>
           <Route path="/personal">
             <Personal />
           </Route>
