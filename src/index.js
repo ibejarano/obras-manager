@@ -24,13 +24,11 @@ const uploadLink = createUploadLink({
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token =
-    localStorage.getItem("token") ||
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjEzNDE5MjcyLCJleHAiOjE2MTYwMTEyNzJ9.a58aDI8IMasGsBNK7-467jzEmPfBgYjd-TuGpugSjDA";
+  const token = localStorage.getItem("obras-token");
   return {
     headers: {
-      ...headers
-      // authorization: token ? `Bearer ${token}` : "",
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
     },
   };
 });

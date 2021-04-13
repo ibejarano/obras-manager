@@ -1,5 +1,14 @@
 import { gql } from "@apollo/client";
 
+const ME = gql`
+  query {
+    me {
+      username
+      email
+    }
+  }
+`;
+
 const GET_OBRAS = gql`
   query {
     obras {
@@ -56,30 +65,27 @@ const GET_INVENTARIOS = gql`
 const GET_INVENTARIO_WITH_ID = gql`
   query($idObra: ID!) {
     obra(id: $idObra) {
-      inventario {
-        id
-        piping: materials(where: { tipo: "piping" }) {
-          diametro_pulg
-          cantidad
-          num_serie
-          tipo
-          material
-        }
-        welding: materials(where: { tipo: "welding" }) {
-          diametro_pulg
-          cantidad
-          num_serie
-          material
-          descripcion
-        }
-        estructural: materials(where: { tipo: "estructural" }) {
-          tipo_perfil
-          cantidad
-          num_serie
-          tipo
-          material
-        }
+      materials {
+        diametro_pulg
+        cantidad
+        num_serie
+        tipo
+        material
+        tipo_perfil
       }
+    }
+  }
+`;
+
+const GET_INVENTARIOS_ALL = gql`
+  query {
+    materials {
+      diametro_pulg
+      cantidad
+      num_serie
+      tipo
+      material
+      tipo_perfil
     }
   }
 `;
@@ -94,6 +100,30 @@ const GET_PERSONAS = gql`
       obra {
         nombre
       }
+    }
+  }
+`;
+
+const GET_CALIDAD_ALL = gql`
+  query {
+    calidads {
+      tipo
+      id
+      nombre
+      revision
+      codigo
+    }
+  }
+`;
+
+const GET_PLANOS_ALL = gql`
+  query {
+    planos {
+      tipo
+      id
+      nombre
+      revision
+      codigo
     }
   }
 `;
@@ -113,21 +143,14 @@ const GET_PERSONAS_WITH_ID = gql`
 const GET_PLANOS_WITH_ID = gql`
   query($idObra: ID!) {
     obra(id: $idObra) {
-      plano {
-        civiles {
-          id
+      planos {
+        id
+        codigo
+        nombre
+        tipo
+        revision
+        archivo_aprobado {
           url
-          name
-        }
-        mecanicos {
-          id
-          url
-          name
-        }
-        piping {
-          id
-          url
-          name
         }
       }
     }
@@ -137,27 +160,14 @@ const GET_PLANOS_WITH_ID = gql`
 const GET_CALIDAD_WITH_ID = gql`
   query($idObra: ID!) {
     obra(id: $idObra) {
-      calidad {
-        certificados {
+      calidads {
+        id
+        tipo
+        revision
+        codigo
+        nombre
+        archivo {
           url
-          name
-          caption
-          id
-          created_at
-        }
-        planillas {
-          url
-          name
-          caption
-          id
-          created_at
-        }
-        procedimientos {
-          url
-          name
-          caption
-          created_at
-          id
         }
       }
     }
@@ -173,4 +183,8 @@ export {
   GET_CALIDAD_WITH_ID,
   GET_OBRAS,
   GET_INVENTARIO_WITH_ID,
+  GET_CALIDAD_ALL,
+  GET_PLANOS_ALL,
+  GET_INVENTARIOS_ALL,
+  ME,
 };
