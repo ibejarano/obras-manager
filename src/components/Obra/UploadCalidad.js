@@ -1,29 +1,14 @@
 import React from "react";
-import { useMutation } from "@apollo/client";
 
 import UploadForm from "../common/UploadForm";
-import {
-  UPDATE_CALIDAD_CERTIFICADOS,
-  UPDATE_CALIDAD_PROCEDIMIENTOS,
-  UPDATE_CALIDAD_PLANILLAS,
-} from "../../adapters/mutations";
+import { UPLOAD_CALIDAD } from "../../adapters/mutations";
 
-export default function UploadCalidad({
-  certificados,
-  procedimientos,
-  planillas,
-  refetch,
-}) {
-  const [updateCertificados] = useMutation(UPDATE_CALIDAD_CERTIFICADOS);
-  const [updatePlanillas] = useMutation(UPDATE_CALIDAD_PLANILLAS);
-  const [updateProcedimientos] = useMutation(UPDATE_CALIDAD_PROCEDIMIENTOS);
-
+export default function UploadCalidad({ refetch, tipos }) {
   return (
     <UploadForm
-      valTypes={["planillas", "procedimientos", "certificados"]}
-      prevValues={[planillas, procedimientos, certificados]}
-      mutations={[updatePlanillas, updateProcedimientos, updateCertificados]}
+      valTypes={tipos}
       refetch={refetch}
+      MUTATION_GQL={UPLOAD_CALIDAD}
     />
   );
 }

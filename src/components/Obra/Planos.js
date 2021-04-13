@@ -28,7 +28,16 @@ function TablePlano({ data }) {
       <Thead className="bg-gray-800 text-white">
         <Tr>
           <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Nombre del plano
+            Titulo
+          </Th>
+          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+            Codigo
+          </Th>
+          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+            Revision
+          </Th>
+          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
+            Cant. de archivos
           </Th>
           <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
             Descargar
@@ -36,13 +45,18 @@ function TablePlano({ data }) {
         </Tr>
       </Thead>
       <Tbody className="text-gray-700">
-        {data.map(({ name, url }) => (
-          <Tr>
-            <Td>{name}</Td>
+        {data.map(({ id, codigo, nombre, revision, archivo_aprobado }) => (
+          <Tr key={id}>
+            <Td>{nombre}</Td>
+            <Td>{codigo}</Td>
+            <Td>{revision || "-"}</Td>
+            <Td>{archivo_aprobado.length}</Td>
             <Td>
-              <a target="_blank" href={"http://localhost:1337" + url}>
-                <DownloadIcon />
-              </a>
+              {archivo_aprobado.map(({ url }) => (
+                <a target="_blank" href={"http://localhost:1337" + url}>
+                  <DownloadIcon />
+                </a>
+              ))}
             </Td>
           </Tr>
         ))}
@@ -65,10 +79,10 @@ export default function Planos() {
   if (error) return <p>Error :(</p>;
 
   const {
-    obra: { plano },
+    obra: { planos },
   } = data;
 
-  const { civiles, mecanicos, piping } = plano;
+  const tipos = ["piping", "civil", "mecanico", "otro"];
 
   return (
     <React.Fragment>
@@ -83,21 +97,17 @@ export default function Planos() {
       </Button>
       <Tabs my={4}>
         <TabList>
-          <Tab>Piping</Tab>
-          <Tab>Mecanico</Tab>
-          <Tab>Civil</Tab>
+          {tipos.map((tipo) => (
+            <Tab key={tipo}>{tipo.toUpperCase()}</Tab>
+          ))}
         </TabList>
 
         <TabPanels>
-          <TabPanel>
-            <TablePlano data={piping} tipo="Civil" />
-          </TabPanel>
-          <TabPanel>
-            <TablePlano data={civiles} tipo="Mecanico" />
-          </TabPanel>
-          <TabPanel>
-            <TablePlano data={mecanicos} tipo="Piping" />
-          </TabPanel>
+          {tipos.map((tipo) => (
+            <TabPanel>
+              <TablePlano data={planos.filter((plano) => plano.tipo == tipo)} />
+            </TabPanel>
+          ))}
         </TabPanels>
       </Tabs>
       <DrawerPane
@@ -106,7 +116,7 @@ export default function Planos() {
         isOpen={isOpen}
         btnRef={btnRef}
       >
-        <UploadPlanos plano={plano} refetch={refetch} />
+        <UploadPlanos refetch={refetch} tipos={tipos} />
       </DrawerPane>
     </React.Fragment>
   );

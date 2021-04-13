@@ -1,186 +1,41 @@
 import React from "react";
+import { Tabs, TabList, TabPanel, Tab, TabPanels } from "@chakra-ui/react";
 
 import {
-  Table,
-  Thead,
-  Tbody,
-  Td,
-  Tr,
-  Th,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
-} from "@chakra-ui/react";
+  piping_headers,
+  estructural_headers,
+  welding_headers,
+} from "./headers";
+import RenderTable from "../common/Table";
 
-function searchField(item, fields, term) {
-  for (let field of fields) {
-    if (item[field].search(term) >= 0) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function TableRow({
-  diametro_pulg,
-  cantidad,
-  num_serie,
-  material,
-  tipo_perfil,
-  descripcion,
-  obra,
-}) {
-  return (
-    <Tr>
-      {descripcion && <Td>{descripcion}</Td>}
-      <Td>{diametro_pulg || tipo_perfil}</Td>
-      <Td>{cantidad}</Td>
-      <Td>{material || "-"}</Td>
-      <Td>{num_serie || "-"}</Td>
-      {obra && <Td>{obra.nombre}</Td>}
-    </Tr>
-  );
-}
-
-function PipingTable({ materiales }) {
-  return (
-    <Table colorScheme="teal">
-      <Thead>
-        <Tr>
-          <Th>Diametro [pulg]</Th>
-          <Th>Cantidad [metros]</Th>
-          <Th>Material</Th>
-          <Th>Serie</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {materiales.map((material, idx) => (
-          <TableRow key={idx} {...material} />
-        ))}
-      </Tbody>
-    </Table>
-  );
-}
-
-function PipingTables({ inventarios, text }) {
-  const SEARCH_FIELDS = ["material", "num_serie"];
-
-  return (
-    <Table colorScheme="teal">
-      <Thead>
-        <Tr>
-          <Th>Diametro [pulg]</Th>
-          <Th>Cantidad [metros]</Th>
-          <Th>Material</Th>
-          <Th>Serie</Th>
-          <Th>Obra</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {inventarios.map(({ piping, obra }) =>
-          piping
-            .filter((item) => searchField(item, SEARCH_FIELDS, text))
-            .map((foundedItem, idx) => (
-              <TableRow key={idx} {...foundedItem} obra={obra} />
-            ))
-        )}
-      </Tbody>
-    </Table>
-  );
-}
-
-function WeldingTable({ materiales }) {
-  return (
-    <Table colorScheme="teal">
-      <Thead>
-        <Tr>
-          <Th>Descripcion</Th>
-          <Th>Diametro [pulg]</Th>
-          <Th>Unidades</Th>
-          <Th>Material</Th>
-          <Th>Serie</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {materiales.map((material, idx) => (
-          <TableRow key={idx} {...material} />
-        ))}
-      </Tbody>
-    </Table>
-  );
-}
-
-function EstructTable({ materiales }) {
-  return (
-    <Table colorScheme="teal">
-      <Thead>
-        <Tr>
-          <Th>Tipo de perfil</Th>
-          <Th>Cantidad [metros]</Th>
-          <Th>Material</Th>
-          <Th>Serie</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {materiales.map((material, idx) => (
-          <TableRow key={idx} {...material} />
-        ))}
-      </Tbody>
-    </Table>
-  );
-}
-
-function EstructTables({ inventarios, text }) {
-  const SEARCH_FIELDS = ["material", "tipo_perfil"];
-
-  return (
-    <Table colorScheme="teal">
-      <Thead>
-        <Tr>
-          <Th>Tipo de perfil</Th>
-          <Th>Cantidad [metros]</Th>
-          <Th>Material</Th>
-          <Th>Serie</Th>
-          <Th>Obra</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {inventarios.map(({ estructural, obra }) =>
-          estructural
-            .filter((item) => searchField(item, SEARCH_FIELDS, text))
-            .map((foundedItem, idx) => (
-              <TableRow key={idx} {...foundedItem} obra={obra} />
-            ))
-        )}
-      </Tbody>
-    </Table>
-  );
-}
-
-export default function InventarioObra({ piping, estructural, welding }) {
-  console.log(piping);
+export default function InventarioObra({ inventario }) {
   return (
     <Tabs variant="enclosed-colored" my={4}>
       <TabList>
         <Tab>Piping</Tab>
-        <Tab>Welding</Tab>
         <Tab>Estructural</Tab>
+        <Tab>Welding</Tab>
       </TabList>
       <TabPanels>
         <TabPanel>
-          <PipingTable materiales={piping} />
+          <RenderTable
+            materiales={inventario.filter((mat) => mat.tipo == "piping")}
+            headers={piping_headers}
+          />
         </TabPanel>
         <TabPanel>
-          <WeldingTable materiales={welding} />
+          <RenderTable
+            materiales={inventario.filter((mat) => mat.tipo == "estructural")}
+            headers={estructural_headers}
+          />
         </TabPanel>
         <TabPanel>
-          <EstructTable materiales={estructural} />
+          <RenderTable
+            materiales={inventario.filter((mat) => mat.tipo == "welding")}
+            headers={welding_headers}
+          />
         </TabPanel>
       </TabPanels>
     </Tabs>
   );
 }
-
-export { PipingTables, EstructTables };

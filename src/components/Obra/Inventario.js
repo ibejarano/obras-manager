@@ -34,7 +34,7 @@ export default function Inventario() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
   const {
-    obra: { inventario },
+    obra: { materials },
   } = data;
 
   return (
@@ -48,7 +48,7 @@ export default function Inventario() {
       >
         Agregar items |
       </Button>
-      <InventarioObra {...inventario} />
+      <InventarioObra inventario={materials} />
 
       <Drawer
         isOpen={isOpen}
@@ -62,10 +62,10 @@ export default function Inventario() {
             <DrawerHeader>Actualizar inventario</DrawerHeader>
 
             <DrawerBody>
-              <UpdateInventario
+              {/* <UpdateInventario
                 idInventario={inventario.id}
                 refetch={refetch}
-              />
+              /> */}
             </DrawerBody>
 
             <DrawerFooter>
