@@ -1,35 +1,24 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
+import { Button, useDisclosure } from "@chakra-ui/react";
 
 import InventarioObra from "../Inventarios/InventarioObra";
 import UpdateInventario from "../Inventarios/UpdateInventario";
 import { GET_INVENTARIO_WITH_ID } from "../../adapters/queries";
+import DrawerPane from "../common/DrawerPane";
 
 import { AddIcon } from "@chakra-ui/icons";
 
-import {
-  Drawer,
-  DrawerBody,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  useDisclosure,
-  Button,
-} from "@chakra-ui/react";
-
 export default function Inventario() {
   const { id } = useParams();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef();
   const { loading, error, data, refetch } = useQuery(GET_INVENTARIO_WITH_ID, {
     variables: {
       idObra: id,
     },
   });
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = React.useRef();
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
@@ -50,33 +39,14 @@ export default function Inventario() {
       </Button>
       <InventarioObra inventario={materials} />
 
-      <Drawer
-        isOpen={isOpen}
-        placement="right"
+      <DrawerPane
+        headerText="Agregar material"
         onClose={onClose}
-        finalFocusRef={btnRef}
+        isOpen={isOpen}
+        btnRef={btnRef}
       >
-        <DrawerOverlay>
-          <DrawerContent>
-            <DrawerCloseButton />
-            <DrawerHeader>Actualizar inventario</DrawerHeader>
-
-            <DrawerBody>
-              {/* <UpdateInventario
-                idInventario={inventario.id}
-                refetch={refetch}
-              /> */}
-            </DrawerBody>
-
-            <DrawerFooter>
-              <Button variant="outline" mr={3} onClick={onClose}>
-                Cancel
-              </Button>
-              <Button color="blue">Save</Button>
-            </DrawerFooter>
-          </DrawerContent>
-        </DrawerOverlay>
-      </Drawer>
+        <UpdateInventario obraId={id} refetch={refetch} />
+      </DrawerPane>
     </React.Fragment>
   );
 }

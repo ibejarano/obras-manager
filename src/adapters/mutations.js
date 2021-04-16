@@ -83,6 +83,38 @@ const CREATE_ESTRUCTURAL_ENTRY = gql`
   }
 `;
 
+const CREATE_MATERIAL_ENTRY = gql`
+  mutation(
+    $mat_type: ENUM_MATERIAL_TIPO!
+    $diametro_pulg: String
+    $num_serie: String
+    $cantidad: String
+    $tipo_perfil: ENUM_MATERIAL_TIPO_PERFIL
+    $material: String
+    $descripcion: String
+    $obra: ID!
+  ) {
+    createMaterial(
+      input: {
+        data: {
+          tipo: $mat_type
+          diametro_pulg: $diametro_pulg
+          num_serie: $num_serie
+          cantidad: $cantidad
+          tipo_perfil: $tipo_perfil
+          material: $material
+          descripcion: $descripcion
+          obra: $obra
+        }
+      }
+    ) {
+      material {
+        id
+      }
+    }
+  }
+`;
+
 // PLANOS MUTATIONS
 const UPLOAD_PLANO = gql`
   mutation NuevoPlano(
@@ -144,6 +176,7 @@ export {
   CREATE_ESTRUCTURAL_ENTRY,
   CREATE_PIPING_ENTRY,
   CREATE_WELDING_ENTRY,
+  CREATE_MATERIAL_ENTRY,
   UPLOAD_PLANO,
   UPLOAD_CALIDAD,
 };

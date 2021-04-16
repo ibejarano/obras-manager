@@ -1,10 +1,7 @@
 import React from "react";
 import { useMutation } from "@apollo/client";
-import {
-  CREATE_ESTRUCTURAL_ENTRY,
-  CREATE_PIPING_ENTRY,
-  CREATE_WELDING_ENTRY,
-} from "../../adapters/mutations";
+import { toast } from "react-toastify";
+import { CREATE_MATERIAL_ENTRY } from "../../adapters/mutations";
 
 import {
   FormControl,
@@ -17,7 +14,7 @@ import {
   Select,
 } from "@chakra-ui/react";
 
-const TIPOS_PERFIL = ["L", "U", "T", "dobleT"];
+const TIPOS_PERFIL = ["L", "U", "T", "dobleT", "N.A."];
 const AVAILABLE_DIAMETERS = [
   "1",
   "1 1/4",
@@ -57,64 +54,42 @@ function SelectField({ newItem, handleChange }) {
   );
 }
 
-export default function AddPipingMaterial({ idInventario, refetch }) {
+export default function AddPipingMaterial({ obraId, refetch }) {
   const [newItem, setNewItem] = React.useState({
     descripcion: "",
     diametro_pulg: "disabled",
-    cantidad: "",
-    material: "",
-    num_serie: "",
+    cantidad: "31.2",
+    material: "test_1",
+    num_serie: "test_serie",
     mat_type: "piping",
     tipo_perfil: "",
   });
 
-  const [createPiping] = useMutation(CREATE_PIPING_ENTRY);
-  const [createWelding] = useMutation(CREATE_WELDING_ENTRY);
-  const [createEstructural] = useMutation(CREATE_ESTRUCTURAL_ENTRY);
+  const [createMaterial] = useMutation(CREATE_MATERIAL_ENTRY);
 
   const handleChange = (e) => {
     const attr = e.target.name;
     setNewItem((prev) => ({ ...prev, [attr]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const outputData = { ...newItem };
-    switch (newItem.mat_type) {
-      case "piping":
-        delete outputData.descripcion;
-        delete outputData.tipo_perfil;
-        delete outputData.mat_type;
-        createPiping({
-          variables: { ...outputData, id: idInventario },
-        })
-          .then(({ data: { updateInventario } }) => refetch())
-          .catch((err) => console.log(err));
-
-        break;
-      case "welding":
-        delete outputData.tipo_perfil;
-        delete outputData.mat_type;
-        createWelding({
-          variables: { ...outputData, id: idInventario },
-        })
-          .then(({ data: { updateInventario } }) => refetch())
-          .catch((err) => console.log(err.toString()));
-        break;
-      case "estructural":
-        delete outputData.descripcion;
-        delete outputData.diametro_pulg;
-        delete outputData.mat_type;
-
-        createEstructural({
-          variables: { ...outputData, id: idInventario },
-        })
-          .then(({ data: { updateInventario } }) => refetch())
-          .catch((err) => console.log(err));
-        break;
-      default:
-        break;
+    if (outputData.mat_type !== "estructural") {
+      delete outputData["tipo_perfil"];
     }
+    await createMaterial({
+      variables: {
+        ...outputData,
+        obra: obraId,
+      },
+    }).catch((err) => {
+      toast.error("Ocurrio un error");
+    });
+
+    console.log("vino por aca");
+    refetch();
+    toast.success("Material agregado.");
   };
 
   return (
