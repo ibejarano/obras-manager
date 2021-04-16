@@ -1,69 +1,13 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
+import { useDisclosure, Button } from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
 
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  useDisclosure,
-  Button,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
-} from "@chakra-ui/react";
-import { AddIcon, DownloadIcon } from "@chakra-ui/icons";
 import UploadPlanos from "./UploadPlanos";
 import DrawerPane from "../common/DrawerPane";
+import { PlanosTable } from "../Tables";
 import { GET_PLANOS_WITH_ID } from "../../adapters/queries";
-
-function TablePlano({ data }) {
-  return (
-    <Table className="min-w-full bg-white">
-      <Thead className="bg-gray-800 text-white">
-        <Tr>
-          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Titulo
-          </Th>
-          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Codigo
-          </Th>
-          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Revision
-          </Th>
-          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Cant. de archivos
-          </Th>
-          <Th className="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">
-            Descargar
-          </Th>
-        </Tr>
-      </Thead>
-      <Tbody className="text-gray-700">
-        {data.map(({ id, codigo, nombre, revision, archivo_aprobado }) => (
-          <Tr key={id}>
-            <Td>{nombre}</Td>
-            <Td>{codigo}</Td>
-            <Td>{revision || "-"}</Td>
-            <Td>{archivo_aprobado.length}</Td>
-            <Td>
-              {archivo_aprobado.map(({ url }) => (
-                <a target="_blank" href={"http://localhost:1337" + url}>
-                  <DownloadIcon />
-                </a>
-              ))}
-            </Td>
-          </Tr>
-        ))}
-      </Tbody>
-    </Table>
-  );
-}
 
 export default function Planos() {
   const { id } = useParams();
@@ -95,21 +39,7 @@ export default function Planos() {
       >
         Agregar archivos |
       </Button>
-      <Tabs my={4}>
-        <TabList>
-          {tipos.map((tipo) => (
-            <Tab key={tipo}>{tipo.toUpperCase()}</Tab>
-          ))}
-        </TabList>
-
-        <TabPanels>
-          {tipos.map((tipo) => (
-            <TabPanel>
-              <TablePlano data={planos.filter((plano) => plano.tipo == tipo)} />
-            </TabPanel>
-          ))}
-        </TabPanels>
-      </Tabs>
+      <PlanosTable planos={planos} />
       <DrawerPane
         headerText="Subir Planos"
         onClose={onClose}
