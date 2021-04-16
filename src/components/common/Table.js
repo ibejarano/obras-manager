@@ -65,7 +65,7 @@ function DefaultColumnFilter({
 }
 
 export default function RenderTable({ materiales, headers }) {
-  const data = React.useMemo(() => materiales, []);
+  const data = React.useMemo(() => materiales, [materiales]);
   const columns = React.useMemo(() => headers, []);
   const filterTypes = React.useMemo(
     () => ({
