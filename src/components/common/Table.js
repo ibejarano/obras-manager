@@ -133,6 +133,7 @@ export default function RenderTable({ materiales, headers }) {
         <Tbody {...getTableBodyProps()}>
           {rows.map((row) => {
             prepareRow(row);
+            console.log(row)
             return (
               <Tr {...row.getRowProps()}>
                 {row.cells.map((cell) => {

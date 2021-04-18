@@ -112,6 +112,9 @@ const GET_CALIDAD_ALL = gql`
       nombre
       revision
       codigo
+      archivo {
+        url
+      }
     }
   }
 `;
@@ -124,6 +127,9 @@ const GET_PLANOS_ALL = gql`
       nombre
       revision
       codigo
+      archivo_aprobado {
+        url
+      }
     }
   }
 `;

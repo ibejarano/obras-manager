@@ -1,7 +1,20 @@
 import React from "react";
 import { Tabs, TabList, TabPanel, Tab, TabPanels } from "@chakra-ui/react";
+import { DownloadIcon } from "@chakra-ui/icons";
 
 import RenderTable from "../common/Table";
+
+const DownloadFilesIcons = ({ values }) => {
+  return (
+    <React.Fragment>
+      {values.map((url) => (
+        <a href={url} download>
+          <DownloadIcon />
+        </a>
+      ))}
+    </React.Fragment>
+  );
+};
 
 export default function PlanosTable({ planos }) {
   const headers = [
@@ -16,6 +29,11 @@ export default function PlanosTable({ planos }) {
     {
       Header: "Codigo",
       accessor: "codigo",
+    },
+    {
+      Header: "Archivo",
+      accessor: (row) => row.archivo_aprobado.map((a) => a.url),
+      Cell: ({ cell: { value } }) => <DownloadFilesIcons values={value} />,
     },
   ];
 
