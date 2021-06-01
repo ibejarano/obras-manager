@@ -15,7 +15,7 @@ import { setContext } from "@apollo/client/link/context";
 import { createUploadLink } from "apollo-upload-client";
 
 const uploadLink = createUploadLink({
-  uri: "http://localhost:1337/graphql",
+  uri: "https://rocky-ridge-06182.herokuapp.com/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
